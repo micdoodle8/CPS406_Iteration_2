@@ -1,6 +1,9 @@
 package ca.ryerson.scs.iteration2;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.ResultSet;
 
 
 /**
@@ -30,5 +33,27 @@ public class ConnectToDatabase {
     }
     public Connection UseConnection(){
         return conn;
+    }
+    public ResultSet RetrieveData(String Query) {
+        ResultSet rs = null;
+        Statement stmt = null;
+        try {
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery(Query);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (stmt != null) stmt.close();
+            } catch (Exception e) {
+            }
+            ;
+            try {
+                if (rs != null) rs.close();
+            } catch (Exception e) {
+            }
+            ;
+        }
+        return rs;
     }
 }
