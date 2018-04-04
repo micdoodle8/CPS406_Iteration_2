@@ -1,10 +1,13 @@
-//package com.example.eugene.testing;
+package ca.ryerson.scs.iteration2;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+import java.util.ArrayList;
 
 public class DBHandler extends SQLiteOpenHelper {
 
@@ -66,7 +69,7 @@ public class DBHandler extends SQLiteOpenHelper {
             "DROP TABLE IF EXISTS " + MEMContract.Payment.TABLE_NAME;
 
     private static final String CREATE_HALL_TABLE =
-            "CREATE TABLE " + MEMContract.Payment.TABLE_NAME + " (" +
+            "CREATE TABLE " + MEMContract.Hall.TABLE_NAME + " (" +
                     MEMContract.Hall._ID + " INTEGER PRIMARY KEY," +
                     MEMContract.Hall.NAME + " TEXT," +
                     MEMContract.Hall.RATE + " REAL)";
@@ -91,22 +94,22 @@ public class DBHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         for(String sql : creators) db.execSQL(sql);
-
-        populateDummyData(db);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         for(String sql : deletors) db.execSQL(sql);
-
         onCreate(db);
     }
 
 
-    public void populateDummyData(SQLiteDatabase db){
+    public void populateDummyData(){
+
+        SQLiteDatabase db = this.getWritableDatabase();
 
         db.execSQL("INSERT INTO CUSTOMER (NAME, CONSECUTIVE_PAYMENT) VALUES('John Smith', '01-04-2018') ");
         db.execSQL("INSERT INTO CUSTOMER (NAME, CONSECUTIVE_PAYMENT) VALUES('Xi Jin Ping', '20-03-2018') ");
+        db.execSQL("INSERT INTO CUSTOMER (NAME, CONSECUTIVE_PAYMENT) VALUES('Peter Griffin', '15-03-2018') ");
 
         db.execSQL("INSERT INTO HALL (NAME, RATE) VALUES('Main practice hall', 12) ");
         db.execSQL("INSERT INTO HALL (NAME, RATE) VALUES('East wing gym', 11) ");
@@ -123,8 +126,19 @@ public class DBHandler extends SQLiteOpenHelper {
         db.execSQL("INSERT INTO PAYMENT (ATTENDEE_ID, DATE, AMOUNT) VALUES(1, '01-04-2018', 24) ");
 
 
-        db.execSQL("INSERT INTO COACH (ATTENDEE_ID, DATE, AMOUNT) VALUES('Tom Coughlin', 14) ");
+        db.execSQL("INSERT INTO COACH (NAME, RATE) VALUES('Tom Coughlin', 14) ");
         db.execSQL("INSERT INTO COACH (NAME, RATE) VALUES('Bobby Bowden', 13) ");
+
+    }
+
+    public void getCustomer( int id){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT NAME FROM CUSTOMER WHERE _ID = " + id, null);
+
+        cursor.moveToFirst();
+
+        Log.d("STATE", cursor.getString(0));
 
     }
 
@@ -136,6 +150,16 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
 
+    public ArrayList<String> getCustomers() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ArrayList<String> names = new ArrayList<>();
+
+        Cursor cursor = db.rawQuery("SELECT NAME FROM CUSTOMER", null);
+
+        while (cursor.moveToNext()) names.add(cursor.getString(0));
+
+        return names;
+    }
 
     public void addNewCustomer(String name) {
 

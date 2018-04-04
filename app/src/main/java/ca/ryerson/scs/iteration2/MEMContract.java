@@ -1,4 +1,4 @@
-//package com.example.eugene.testing;
+package ca.ryerson.scs.iteration2;
 
 import android.provider.BaseColumns;
 

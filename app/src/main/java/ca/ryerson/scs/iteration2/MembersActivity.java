@@ -1,5 +1,6 @@
 package ca.ryerson.scs.iteration2;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -36,21 +37,18 @@ public class MembersActivity extends AppCompatActivity {
 
         GridView gridview = (GridView) findViewById(R.id.gridview);
 
-        // Query database
-        String[] members = new String[]{
-            "Billy",
-            "John",
-            "Suzy",
-            "Phillis",
-            "Rico",
-            "Alfred",
-            "Sam"
-        };
 
-        // Populate a List from Array elements
-        final List<String> membersList = new ArrayList<String>(Arrays.asList(members));
 
-        gridview.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, membersList) {
+        Context context = getApplicationContext();
+        context.deleteDatabase("MEM");
+
+        DBHandler dbHandler = new DBHandler(context);
+        dbHandler.populateDummyData();
+
+        final ArrayList<String> members = dbHandler.getCustomers();
+
+
+        gridview.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, members) {
             public View getView(int position, View convertView, ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
                 TextView tv = (TextView) view;
@@ -74,7 +72,7 @@ public class MembersActivity extends AppCompatActivity {
                 tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
 
                 // Set the TextView text (GridView item text)
-                tv.setText(membersList.get(position));
+                tv.setText(members.get(position));
 
                 // Set the TextView background color
                 tv.setBackgroundColor(Color.parseColor("#FF65C6EB"));
@@ -106,6 +104,7 @@ public class MembersActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
     //Creates a List<String> of customer names and returns it
     private List<String> CustomerList(){
         String sql = "SELECT Name " +
@@ -123,6 +122,7 @@ public class MembersActivity extends AppCompatActivity {
             return null;
         }
     }
+
     //Creates a List<String> of customer names who owe money
     //Also retrieves the emails
     private List<String> CustomerDebt(){
