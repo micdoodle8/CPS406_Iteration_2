@@ -42,6 +42,7 @@ public class DBHandler extends SQLiteOpenHelper {
             "CREATE TABLE " + MEMContract.Customer.TABLE_NAME + " (" +
                     MEMContract.Customer._ID + " INTEGER PRIMARY KEY," +
                     MEMContract.Customer.NAME + " TEXT," +
+                    MEMContract.Customer.EMAIL + " TEXT," +
                     MEMContract.Customer.CONSECUTIVE_PAYMENT + " TEXT)";
 
     private static final String DELETE_CUSTOMER_TABLE =
@@ -107,9 +108,9 @@ public class DBHandler extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
-        db.execSQL("INSERT INTO CUSTOMER (NAME, CONSECUTIVE_PAYMENT) VALUES('John Smith', '01-04-2018') ");
-        db.execSQL("INSERT INTO CUSTOMER (NAME, CONSECUTIVE_PAYMENT) VALUES('Xi Jin Ping', '20-03-2018') ");
-        db.execSQL("INSERT INTO CUSTOMER (NAME, CONSECUTIVE_PAYMENT) VALUES('Peter Griffin', '15-03-2018') ");
+        db.execSQL("INSERT INTO CUSTOMER (NAME, EMAIL, CONSECUTIVE_PAYMENT) VALUES('John Smith', 'jsmith@mail.com', '01-04-2018') ");
+        db.execSQL("INSERT INTO CUSTOMER (NAME, EMAIL, CONSECUTIVE_PAYMENT) VALUES('Xi Jin Ping', 'supremeleader@mail.com', '20-03-2018') ");
+        db.execSQL("INSERT INTO CUSTOMER (NAME, EMAIL, CONSECUTIVE_PAYMENT) VALUES('Peter Griffin', 'numnuts@mail.com', '15-03-2018') ");
 
         db.execSQL("INSERT INTO HALL (NAME, RATE) VALUES('Main practice hall', 12) ");
         db.execSQL("INSERT INTO HALL (NAME, RATE) VALUES('East wing gym', 11) ");
@@ -135,32 +136,51 @@ public class DBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         Cursor cursor = db.rawQuery("SELECT NAME FROM CUSTOMER WHERE _ID = " + id, null);
-
         cursor.moveToFirst();
 
-        Log.d("STATE", cursor.getString(0));
+        //Log.d("STATE", cursor.getString(0));
 
     }
 
 
+    ///Executes the provided query directly
     public void executeSQL(String sql){
-
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL(sql);
     }
 
-
+    //Returns a list of all customer names
     public ArrayList<String> getCustomers() {
         SQLiteDatabase db = this.getWritableDatabase();
         ArrayList<String> names = new ArrayList<>();
 
         Cursor cursor = db.rawQuery("SELECT NAME FROM CUSTOMER", null);
-
         while (cursor.moveToNext()) names.add(cursor.getString(0));
 
         return names;
     }
 
+    //Returns a list of customer names and emails who owe money
+    public ArrayList<String> CustomerDebts(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ArrayList<String> info = new ArrayList<>();
+
+        Cursor cursor = db.rawQuery("SELECT NAME, EMAIL FROM CUSTOMER WHERE CONSECUTIVE_PAYMENT < 0", null);
+        while (cursor.moveToNext()) info.add(cursor.getString(0) + " " + cursor.getString(1));
+
+        return info;
+    }
+
+
+
+
+
+
+
+
+
+
+    //Inserts new customer into the database
     public void addNewCustomer(String name) {
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -173,7 +193,7 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-
+    //Inserts customer info in the database
     public boolean updateCustomer(int id, String name, String consecutivePayment) {
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -185,7 +205,7 @@ public class DBHandler extends SQLiteOpenHelper {
         return db.update(MEMContract.Customer.TABLE_NAME, values, MEMContract.Customer._ID + "=" + id, null) > 0;
     }
 
-
+    //Deletes customer from the database by id
     public boolean deleteCustomer(int id){
 
         SQLiteDatabase db = this.getWritableDatabase();

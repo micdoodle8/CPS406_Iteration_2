@@ -16,6 +16,7 @@ public final class MEMContract {
     public static class Customer implements BaseColumns {
         public static final String TABLE_NAME = "CUSTOMER";
         public static final String NAME = "NAME";
+        public static final String EMAIL = "EMAIL";
         public static final String CONSECUTIVE_PAYMENT = "CONSECUTIVE_PAYMENT";
     }
 

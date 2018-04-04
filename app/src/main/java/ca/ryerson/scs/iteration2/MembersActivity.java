@@ -104,45 +104,4 @@ public class MembersActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
-    //Creates a List<String> of customer names and returns it
-    private List<String> CustomerList(){
-        String sql = "SELECT Name " +
-                    "FROM Customer";
-
-        ResultSet rs = Conn.RetrieveData(sql);
-        List<String> Names = new LinkedList<String>();
-        try {
-            while (rs.next()) {
-                Names.add(rs.getString("Name"));
-            }
-            return Names;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    //Creates a List<String> of customer names who owe money
-    //Also retrieves the emails
-    private List<String> CustomerDebt(){
-        String sql = "SELECT Name, Email " +
-                    "FROM Customers " +
-                    "WHERE Consec_Pay < 0";
-
-        ResultSet rs = Conn.RetrieveData(sql);
-        List<String> Names = new LinkedList<String>();
-        Integer i = 0;
-        try {
-            while (rs.next()) {
-                Names.add("");
-                Names.set(i, rs.getString("Name") + "," +rs.getString("Email"));
-                i++;
-            }
-            return Names;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
 }
