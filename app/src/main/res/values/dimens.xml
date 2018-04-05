@@ -1,3 +1,7 @@
 <resources>
-    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="in_between_layout_space">20dp</dimen>
+    <dimen name="in_between_widget_space">5dp</dimen>
+    <dimen name="AppNameSplashScreen">30dp</dimen>
 </resources>

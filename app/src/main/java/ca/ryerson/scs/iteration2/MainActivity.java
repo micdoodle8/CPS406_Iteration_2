@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         finances.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent openFinances = new Intent(MainActivity.this, CoachActivity.class);
+                Intent openFinances = new Intent(MainActivity.this, FinancesActivity.class);
                 MainActivity.this.startActivity(openFinances);
             }
         });
@@ -39,6 +39,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //Temporarily used to access the coach screen
+        Button schedule = (Button) findViewById(R.id.buttonSchedule);
+        members.setOnClickListener( view -> {
+
+            Intent openCoach = new Intent(MainActivity.this, CoachActivity.class);
+            MainActivity.this.startActivity(openCoach);
+
+        });
 
 
 

@@ -8,7 +8,10 @@ public class SetMeetingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.set_meeting_popup);
+        setContentView(R.layout.activity_set_meeting);
+
+
+        //findViewById(R.id.date).setOn
 
 
 

@@ -27,7 +27,6 @@ import java.sql.ResultSet;
 
 public class MembersActivity extends AppCompatActivity {
 
-    public ConnectToDatabase Conn = new ConnectToDatabase();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +35,6 @@ public class MembersActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         GridView gridview = (GridView) findViewById(R.id.gridview);
-
 
 
         Context context = getApplicationContext();

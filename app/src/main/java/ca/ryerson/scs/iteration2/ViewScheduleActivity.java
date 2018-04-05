@@ -8,7 +8,7 @@ public class ViewScheduleActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.view_schedule_popup);
+        setContentView(R.layout.activity_view_schedule);
     }
 
 }
