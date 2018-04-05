@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         finances.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent openFinances = new Intent(MainActivity.this, FinancesActivity.class);
+                Intent openFinances = new Intent(MainActivity.this, CoachActivity.class);
                 MainActivity.this.startActivity(openFinances);
             }
         });

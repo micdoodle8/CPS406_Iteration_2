@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="ca.ryerson.scs.iteration2.CoachActivity"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:verticalSpacing="30px">
+
+    <Button
+        android:id="@+id/setMeeting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Set Meeting">
+    </Button>
+
+    <Button
+        android:id="@+id/viewSchedule"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="View Schedule">
+    </Button>
+
+    <Button
+        android:id="@+id/memberList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Member List">
+    </Button>
+
+    <Button
+        android:id="@+id/sendNotification"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Send Notification">
+    </Button>
+
+
+</LinearLayout>

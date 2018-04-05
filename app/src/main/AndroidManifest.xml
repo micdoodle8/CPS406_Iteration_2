@@ -39,6 +39,36 @@
                 <category android:name="android.intent.category.INFO" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".CoachActivity"
+            android:label="Coach"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.INFO" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".SetMeetingActivity"
+            android:label="Set Meeting"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.INFO" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ViewScheduleActivity"
+            android:label="View Schedule"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.INFO" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
