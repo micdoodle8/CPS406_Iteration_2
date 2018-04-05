@@ -27,7 +27,6 @@ import java.sql.ResultSet;
 
 public class FinancesActivity extends AppCompatActivity {
 
-    public ConnectToDatabase Conn = new ConnectToDatabase();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,40 +107,4 @@ public class FinancesActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private double AmountOwed(String EarlyDate, String LaterDate){
-        //AmountOwed to Coaches and Hall Rent
-        //The dates are defaulted to the last month
-        //where EarlyDate and LaterDate are supplied in #DD/MM/YYYY# format
-
-        String sql = "SELECT SUM(Coach.Rate + Halls.Rate) as AmountOwed " +
-                    "FROM Meetings " +
-                    "JOIN Coach ON Meetings.Organizer = Coach.ID " +
-                    "JOIN Halls ON Meetings.Hall_ID = Halls.ID " +
-                    "WHERE Date BETWEEN " + EarlyDate + " AND " + LaterDate;
-
-        ResultSet rs = Conn.RetrieveData(sql);
-        try {
-            return rs.getDouble("AmountOwed");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return 0;
-        }
-    }
-
-    private double AmountEarned(String EarlyDate, String LaterDate){
-        //Get money earned
-        //The dates are defaulted to the last month
-        //where EarlyDate and LaterDate are supplied in #DD/MM/YYYY# format
-
-        String sql = "SELECT SUM(Amt) as MyTotal " +
-                    "FROM Payment " +
-                    "WHERE Date BETWEEN " + EarlyDate + " AND " + LaterDate;
-        ResultSet rs = Conn.RetrieveData(sql);
-        try {
-            return rs.getDouble("AmountOwed");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return 0;
-        }
-    }
 }

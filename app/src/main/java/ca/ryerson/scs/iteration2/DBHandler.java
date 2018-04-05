@@ -191,7 +191,17 @@ public class DBHandler extends SQLiteOpenHelper {
         return info;
     }
 
+    //Returns the money owed
+    public String MoneyOwed(String EarlyDate, String LaterDate){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String OwedMoney = "";
 
+        Cursor cursor = db.rawQuery("SELECT SUM(COACH.rate + HALLS.Rate) as AmountOwed FROM MEETINGS JOIN COACH ON MEETINGS.Organizer = COACH.ID JOIN HALLS ON MEETINGS.Hall_ID WHERE date BETWEEN " + EarlyDate + " AND " + LaterDate, null);
+        cursor.moveToFirst();
+        OwedMoney = cursor.getString(0);
+
+        return OwedMoney;
+    }
 
 
 
@@ -284,7 +294,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         Cursor cursor = db.rawQuery("SELECT CONSECUTIVE_PAYMENT FROM CUSTOMER WHERE _ID = " + customer_ID, null);
         cursor.moveToFirst();
-        if (cursor.getString(1) == "3") { discount = 10;}
+        if (cursor.getString(0) == "3") { discount = 10;}
 
         values.put(MEMContract.Attendee.CUSTOMER_ID, customer_ID);
         values.put(MEMContract.Attendee.MEETING_ID, meeting_ID);
