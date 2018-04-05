@@ -24,9 +24,6 @@ import android.widget.TextView;
  */
 public class RegisterActivity extends AppCompatActivity {
 
-    /**
-     * Keep track of the login task to ensure we can cancel it if requested.
-     */
     private UserLoginTask mAuthTask = null;
 
     // UI references.
@@ -36,7 +33,6 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,7 +121,7 @@ public class RegisterActivity extends AppCompatActivity {
             focusView = mPasswordView;
             cancel = true;
         }
-        else if (!isPasswordValid(password)) {
+        else if (!LoginActivity.isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
@@ -136,7 +132,7 @@ public class RegisterActivity extends AppCompatActivity {
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
             cancel = true;
-        } else if (!isEmailValid(email)) {
+        } else if (!LoginActivity.isEmailValid(email)) {
             mEmailView.setError(getString(R.string.error_invalid_email));
             focusView = mEmailView;
             cancel = true;
@@ -153,16 +149,6 @@ public class RegisterActivity extends AppCompatActivity {
             mAuthTask = new UserLoginTask(name + " " + lastName, email, password);
             mAuthTask.execute((Void) null);
         }
-    }
-
-    private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
-        return email.contains("@");
-    }
-
-    private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
-        return password.length() > 4;
     }
 
     /**
@@ -220,9 +206,11 @@ public class RegisterActivity extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(Void... params) {
 
+            // Add the customer to the DB
             Context context = getApplicationContext();
             DBHandler.getInstance(context).addNewCustomer(mFullName, mEmail);
 
+            // Open main activity
             Intent openMain = new Intent(RegisterActivity.this, MainActivity.class);
             openMain.putExtra("EXTRA_LOGGED_IN_EMAIL", mEmail);
             startActivity(openMain);
