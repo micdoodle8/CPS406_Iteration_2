@@ -32,14 +32,8 @@ public class MembersActivity extends AppCompatActivity {
 
         GridView gridview = (GridView) findViewById(R.id.gridview);
 
-
         Context context = getApplicationContext();
-        context.deleteDatabase("MEM");
-
-        DBHandler dbHandler = new DBHandler(context);
-        dbHandler.populateDummyData();
-
-        final ArrayList<String> members = dbHandler.getCustomers();
+        final ArrayList<String> members = DBHandler.getInstance(context).getCustomers();
 
 
         gridview.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, members) {

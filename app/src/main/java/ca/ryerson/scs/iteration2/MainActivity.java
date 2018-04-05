@@ -14,9 +14,18 @@ import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
+    private boolean loggedIn = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (!getIntent().hasExtra("EXTRA_LOGGED_IN_EMAIL"))
+        {
+            Intent openLogin = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(openLogin);
+        }
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

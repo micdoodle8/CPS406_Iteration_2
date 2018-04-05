@@ -88,8 +88,28 @@ public class DBHandler extends SQLiteOpenHelper {
             "DROP TABLE IF EXISTS " + MEMContract.Coach.TABLE_NAME;
 
 
-    public DBHandler(Context contex) {
+    private static DBHandler instance = null;
+
+    private DBHandler(Context contex) {
         super(contex, DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
+    /**
+     * Get the handle instance
+     *
+     * @param context The app context. Try getApplicationContext() from activity instance
+     */
+    public static DBHandler getInstance(Context context)
+    {
+        if (instance == null)
+        {
+            // Create handler
+            context.deleteDatabase("MEM");
+            instance = new DBHandler(context);
+            instance.populateDummyData();
+        }
+
+        return instance;
     }
 
     @Override
