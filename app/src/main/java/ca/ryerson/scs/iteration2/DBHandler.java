@@ -216,7 +216,7 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     //Inserts new Coach into the database
-    public void addNewCoach(String name, Double rate) {
+    public void addNewCoach(String name, double rate) {
 
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -224,12 +224,12 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(MEMContract.Coach.NAME, name);
         values.put(MEMContract.Coach.RATE, rate);
 
-        db.insert(MEMContract.Customer.TABLE_NAME, null, values);
+        db.insert(MEMContract.Coach.TABLE_NAME, null, values);
         db.close();
     }
 
     //Inserts new Hall into the database
-    public void addNewHall(String name, Double rate) {
+    public void addNewHall(String name, double rate) {
 
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -237,9 +237,41 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(MEMContract.Hall.NAME, name);
         values.put(MEMContract.Hall.RATE, rate);
 
-        db.insert(MEMContract.Customer.TABLE_NAME, null, values);
+        db.insert(MEMContract.Hall.TABLE_NAME, null, values);
         db.close();
     }
-    
+
+    //Inserts new meeting into the database
+    public void MeetingCreation(int coach_ID, int hall_ID, String date, int rate){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(MEMContract.Meeting.DATE, date);
+        values.put(MEMContract.Meeting.HALL_ID, hall_ID);
+        values.put(MEMContract.Meeting.ORGANIZER, coach_ID);
+        values.put(MEMContract.Meeting.RATE, rate);
+
+        db.insert(MEMContract.Attendee.TABLE_NAME, null, values);
+        db.close();
+    }
+
+    //Inserts new Attendee info in and checks if a discount is needed
+    public void MeetingSignUp(int customer_ID, int meeting_ID){
+        int discount = 0;
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+
+        Cursor cursor = db.rawQuery("SELECT CONSECUTIVE_PAYMENT FROM CUSTOMER WHERE _ID = " + customer_ID, null);
+        cursor.moveToFirst();
+        if (cursor.getString(1) == "3") { discount = 10;}
+
+        values.put(MEMContract.Attendee.CUSTOMER_ID, customer_ID);
+        values.put(MEMContract.Attendee.MEETING_ID, meeting_ID);
+        values.put(MEMContract.Attendee.DISCOUNT_PERCENT, discount);
+
+        db.insert(MEMContract.Attendee.TABLE_NAME, null, values);
+        db.close();
+    }
 
 }

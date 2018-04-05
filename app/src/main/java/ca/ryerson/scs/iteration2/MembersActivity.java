@@ -20,10 +20,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.sql.ResultSet;
 
 public class MembersActivity extends AppCompatActivity {
 
