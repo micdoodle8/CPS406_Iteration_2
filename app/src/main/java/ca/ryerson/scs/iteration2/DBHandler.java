@@ -181,12 +181,13 @@ public class DBHandler extends SQLiteOpenHelper {
 
 
     //Inserts new customer into the database
-    public void addNewCustomer(String name) {
+    public void addNewCustomer(String name, String email) {
 
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
         values.put(MEMContract.Customer.NAME, name);
+        values.put(MEMContract.Customer.EMAIL, email);
         values.put(MEMContract.Customer.CONSECUTIVE_PAYMENT, "");
 
         db.insert(MEMContract.Customer.TABLE_NAME, null, values);
@@ -194,12 +195,13 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     //Inserts customer info in the database
-    public boolean updateCustomer(int id, String name, String consecutivePayment) {
+    public boolean updateCustomer(int id, String name, String email, String consecutivePayment) {
 
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
         values.put(MEMContract.Customer.NAME, name);
+        values.put(MEMContract.Customer.EMAIL, email);
         values.put(MEMContract.Customer.CONSECUTIVE_PAYMENT, consecutivePayment);
 
         return db.update(MEMContract.Customer.TABLE_NAME, values, MEMContract.Customer._ID + "=" + id, null) > 0;
@@ -213,5 +215,31 @@ public class DBHandler extends SQLiteOpenHelper {
         return db.delete(MEMContract.Customer.TABLE_NAME, MEMContract.Customer._ID + "=" + id, null) > 0;
     }
 
+    //Inserts new Coach into the database
+    public void addNewCoach(String name, Double rate) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(MEMContract.Coach.NAME, name);
+        values.put(MEMContract.Coach.RATE, rate);
+
+        db.insert(MEMContract.Customer.TABLE_NAME, null, values);
+        db.close();
+    }
+
+    //Inserts new Hall into the database
+    public void addNewHall(String name, Double rate) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(MEMContract.Hall.NAME, name);
+        values.put(MEMContract.Hall.RATE, rate);
+
+        db.insert(MEMContract.Customer.TABLE_NAME, null, values);
+        db.close();
+    }
+    
 
 }
