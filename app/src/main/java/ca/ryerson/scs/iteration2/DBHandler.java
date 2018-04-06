@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -179,7 +178,12 @@ public class DBHandler extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery("SELECT * FROM USER WHERE EMAIL = ? AND PASSWORD = ? ", new String[] {email, password});
         cursor.moveToFirst();
 
-        return cursor.getString(3);
+        int index = cursor.getColumnIndex("ROLE");
+        if (index >= 0) {
+            return cursor.getString(index);
+        }
+
+        return "";
     }
 
     //Inserts new user into the database

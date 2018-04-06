@@ -35,13 +35,16 @@ public class CoachActivity extends AppCompatActivity {
 
         findViewById(R.id.memberList).setOnClickListener( view -> {
             Intent openMembers = new Intent(CoachActivity.this, MembersActivity.class);
+            openMembers.putExtra("EXTRA_ISCOACH", true);
             CoachActivity.this.startActivity(openMembers);
         });
 
-        findViewById(R.id.sendNotification).setOnClickListener( view -> {
-            Intent openMembers = new Intent(CoachActivity.this, MembersActivity.class);
-            CoachActivity.this.startActivity(openMembers);
-        });
+
+        //Moved to members list
+//        findViewById(R.id.sendNotification).setOnClickListener( view -> {
+//            Intent openMembers = new Intent(CoachActivity.this, MembersActivity.class);
+//            CoachActivity.this.startActivity(openMembers);
+//        });
 
     }
 

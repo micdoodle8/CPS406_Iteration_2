@@ -27,10 +27,15 @@ public class MembersActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-//        TableRow.LayoutParams rowParams = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
+        boolean isCoach = getIntent().hasExtra("EXTRA_ISCOACH") && getIntent().getBooleanExtra("EXTRA_ISCOACH", false);
 
         TableLayout tableLayout = findViewById(R.id.members_layout);
         Button notifyButton = findViewById(R.id.notifyButton);
+
+        TextView header1 = findViewById(R.id.members_column_1);
+        TableRow.LayoutParams params = (TableRow.LayoutParams) header1.getLayoutParams();
+        params.span = isCoach ? 2 : 1; // We want the header to span two rows if checkboxes are added
+        header1.setLayoutParams(params);
 
         Context context = getApplicationContext();
 
@@ -40,24 +45,27 @@ public class MembersActivity extends AppCompatActivity {
         {
             TableRow tableRow = new TableRow(context);
 
-            CheckBox checkBox = new CheckBox(context);
-            tableRow.addView(checkBox);
-            checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean selected) {
-                    if (selected) {
-                        selectedCount++;
-                    } else {
-                        selectedCount--;
-                    }
+            if (isCoach) {
+                // Coaches can check off members to perform certain actions
+                CheckBox checkBox = new CheckBox(context);
+                tableRow.addView(checkBox);
+                checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean selected) {
+                        if (selected) {
+                            selectedCount++;
+                        } else {
+                            selectedCount--;
+                        }
 
-                    if (selectedCount <= 0) {
-                        notifyButton.setVisibility(View.INVISIBLE);
-                    } else if (selectedCount == 1) {
-                        notifyButton.setVisibility(View.VISIBLE);
+                        if (selectedCount <= 0) {
+                            notifyButton.setVisibility(View.INVISIBLE);
+                        } else if (selectedCount == 1) {
+                            notifyButton.setVisibility(View.VISIBLE);
+                        }
                     }
-                }
-            });
+                });
+            }
 
             TextView column1 = new TextView(context);
             column1.setText(member);

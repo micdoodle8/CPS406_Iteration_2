@@ -215,30 +215,29 @@ public class LoginActivity extends AppCompatActivity {
             mAuthTask = null;
             showProgress(false);
 
-            if (success) {
-
-                if (userType.equals("CUSTOMER")){
-                    Intent customerActivity = new Intent(LoginActivity.this, MembersActivity.class);
-                    LoginActivity.this.startActivity(customerActivity);
+            if (!userType.isEmpty()) {
+                if (success) {
+                    if (userType.equals("CUSTOMER")){
+                        Intent customerActivity = new Intent(LoginActivity.this, MembersActivity.class);
+                        LoginActivity.this.startActivity(customerActivity);
+                    }
+                    else if (userType.equals("COACH")){
+                        Intent coachActivity = new Intent(LoginActivity.this, CoachActivity.class);
+                        LoginActivity.this.startActivity(coachActivity);
+                    }
+                    else if (userType.equals("TREASURER")){
+                        Intent treasurerActivity = new Intent(LoginActivity.this, FinancesActivity.class);
+                        LoginActivity.this.startActivity(treasurerActivity);
+                    }
+                    else {
+                        Intent placeholder = new Intent(LoginActivity.this, FinancesActivity.class);
+                        LoginActivity.this.startActivity(placeholder);
+                    }
+                    finish();
+                } else {
+                    mPasswordView.setError(getString(R.string.error_incorrect_password));
+                    mPasswordView.requestFocus();
                 }
-                else if (userType.equals("COACH")){
-                    Intent coachActivity = new Intent(LoginActivity.this, CoachActivity.class);
-                    LoginActivity.this.startActivity(coachActivity);
-                }
-                else if (userType.equals("TREASURER")){
-                    Intent treasurerActivity = new Intent(LoginActivity.this, FinancesActivity.class);
-                    LoginActivity.this.startActivity(treasurerActivity);
-                }
-                else {
-                    Intent placeholder = new Intent(LoginActivity.this, FinancesActivity.class);
-                    LoginActivity.this.startActivity(placeholder);
-                }
-
-
-                finish();
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
             }
         }
 

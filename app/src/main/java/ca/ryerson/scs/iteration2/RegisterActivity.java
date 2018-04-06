@@ -256,19 +256,24 @@ public class RegisterActivity extends AppCompatActivity {
                 // Register as coach
                 handler.addNewCoach(mFullName, mCoachHourlyRate);
                 handler.addNewUser(mEmail, mPassword, "COACH", handler.getCoaches().size() + 1);
+
+                Intent coachActivity = new Intent(RegisterActivity.this, CoachActivity.class);
+                RegisterActivity.this.startActivity(coachActivity);
             }
             else
             {
                 // Register as customer
                 handler.addNewCustomer(mFullName, mEmail);
                 handler.addNewUser(mEmail, mPassword, "CUSTOMER", handler.getCustomers().size() + 1);
+
+                Intent customerActivity = new Intent(RegisterActivity.this, MembersActivity.class);
+                RegisterActivity.this.startActivity(customerActivity);
             }
 
-
             // Open main activity
-            Intent openMain = new Intent(RegisterActivity.this, MainActivity.class);
-            openMain.putExtra("EXTRA_LOGGED_IN_EMAIL", mEmail);
-            startActivity(openMain);
+//            Intent openMain = new Intent(RegisterActivity.this, MainActivity.class);
+//            openMain.putExtra("EXTRA_LOGGED_IN_EMAIL", mEmail);
+//            startActivity(openMain);
 
             return true;
         }
