@@ -153,7 +153,7 @@ public class DBHandler extends SQLiteOpenHelper {
         db.execSQL("INSERT INTO ATTENDEE (CUSTOMER_ID, MEETING_ID, DISCOUNT_PERCENT) VALUES(2, 2, 10) ");
 
 
-        db.execSQL("INSERT INTO PAYMENT (ATTENDEE_ID, DATE, AMOUNT) VALUES(1, '2018-04-01 00:00:00', 24) ");
+        db.execSQL("INSERT INTO PAYMENT (ATTENDEE_ID, DATE, AMOUNT) VALUES(1, '2018-01-04 00:00:00', 24) ");
 
 
         db.execSQL("INSERT INTO COACH (NAME, RATE) VALUES('Tom Coughlin', 14) ");
@@ -222,7 +222,17 @@ public class DBHandler extends SQLiteOpenHelper {
 
         return OwedMoney;
     }
+    //Returns the money earned
+    public String MoneyEarned(String EarlyDate, String LaterDate){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String EarnedMoney = "";
 
+        Cursor cursor = db.rawQuery("SELECT SUM(AMOUNT) as AmountEarned FROM PAYMENT WHERE date BETWEEN " + EarlyDate + " AND " + LaterDate, null);
+        cursor.moveToFirst();
+        EarnedMoney = cursor.getString(0);
+
+        return EarnedMoney;
+    }
 
 
 
@@ -324,4 +334,43 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+    //When a customer pays it updates their last consecutive payment time
+    //It also checks the rate for the meeting they are paying for, and if they had a discount
+    //If so it changes the total payment based on the discount then multiplies the final number
+    public boolean CustomerPaid(int id, String date, int attendee_ID){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        boolean Updated = false;
+        values.put(MEMContract.Customer.CONSECUTIVE_PAYMENT, date);
+
+        Updated = db.update(MEMContract.Customer.TABLE_NAME, values, MEMContract.Customer._ID + "=" + id, null) > 0;
+
+        double Payment = 0;
+        int meetingID;
+        db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery("SELECT MEETING_ID FROM ATTENDEE WHERE _ID = " + attendee_ID, null);
+        cursor.moveToFirst();
+        meetingID = cursor.getInt(0);
+
+        cursor = db.rawQuery("SELECT RATE FROM MEETINGS WHERE _ID = " + meetingID, null);
+        cursor.moveToFirst();
+        Payment = cursor.getInt(0);
+
+        db = this.getWritableDatabase();
+        cursor = db.rawQuery("SELECT DISCOUNT_PERCENT FROM ATTENDEE WHERE _ID = " + attendee_ID, null);
+        cursor.moveToFirst();
+        Payment = Payment * (1 - (cursor.getDouble(0)/100));
+
+        db = this.getWritableDatabase();
+        values = new ContentValues();
+
+        values.put(MEMContract.Payment.AMOUNT, Payment);
+        values.put(MEMContract.Payment.ATTENDEE_ID, attendee_ID);
+        values.put(MEMContract.Payment.DATE, date);
+
+        db.insert(MEMContract.Payment.TABLE_NAME, null, values);
+        db.close();
+
+        return Updated;
+    }
 }
