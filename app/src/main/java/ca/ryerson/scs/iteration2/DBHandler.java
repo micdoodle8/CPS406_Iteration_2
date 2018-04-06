@@ -128,23 +128,23 @@ public class DBHandler extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
-        db.execSQL("INSERT INTO CUSTOMER (NAME, EMAIL, CONSECUTIVE_PAYMENT) VALUES('John Smith', 'jsmith@mail.com', '01-04-2018') ");
-        db.execSQL("INSERT INTO CUSTOMER (NAME, EMAIL, CONSECUTIVE_PAYMENT) VALUES('Xi Jin Ping', 'supremeleader@mail.com', '20-03-2018') ");
-        db.execSQL("INSERT INTO CUSTOMER (NAME, EMAIL, CONSECUTIVE_PAYMENT) VALUES('Peter Griffin', 'numnuts@mail.com', '15-03-2018') ");
+        db.execSQL("INSERT INTO CUSTOMER (NAME, EMAIL, CONSECUTIVE_PAYMENT) VALUES('John Smith', 'jsmith@mail.com', '2018-01-04 00:00:00') ");
+        db.execSQL("INSERT INTO CUSTOMER (NAME, EMAIL, CONSECUTIVE_PAYMENT) VALUES('Xi Jin Ping', 'supremeleader@mail.com', '2018-03-20 00:00:00') ");
+        db.execSQL("INSERT INTO CUSTOMER (NAME, EMAIL, CONSECUTIVE_PAYMENT) VALUES('Peter Griffin', 'numnuts@mail.com', '2018-03-15 00:00:00') ");
 
         db.execSQL("INSERT INTO HALL (NAME, RATE) VALUES('Main practice hall', 12) ");
         db.execSQL("INSERT INTO HALL (NAME, RATE) VALUES('East wing gym', 11) ");
 
 
-        db.execSQL("INSERT INTO MEETING (DATE, ORGANIZER, RATE, HALL_ID) VALUES('01-04-2018', 'Coach', 12, 1) ");
-        db.execSQL("INSERT INTO MEETING (DATE, ORGANIZER, RATE, HALL_ID) VALUES('08-04-2018', 'Coach', 10, 2) ");
+        db.execSQL("INSERT INTO MEETING (DATE, ORGANIZER, RATE, HALL_ID) VALUES('2018-04-01 00:00:00', 'Coach', 12, 1) ");
+        db.execSQL("INSERT INTO MEETING (DATE, ORGANIZER, RATE, HALL_ID) VALUES('2018-04-08 00:00:00', 'Coach', 10, 2) ");
 
 
         db.execSQL("INSERT INTO ATTENDEE (CUSTOMER_ID, MEETING_ID, DISCOUNT_PERCENT) VALUES(1, 1, 0) ");
         db.execSQL("INSERT INTO ATTENDEE (CUSTOMER_ID, MEETING_ID, DISCOUNT_PERCENT) VALUES(2, 2, 10) ");
 
 
-        db.execSQL("INSERT INTO PAYMENT (ATTENDEE_ID, DATE, AMOUNT) VALUES(1, '01-04-2018', 24) ");
+        db.execSQL("INSERT INTO PAYMENT (ATTENDEE_ID, DATE, AMOUNT) VALUES(1, '2018-04-01 00:00:00', 24) ");
 
 
         db.execSQL("INSERT INTO COACH (NAME, RATE) VALUES('Tom Coughlin', 14) ");
