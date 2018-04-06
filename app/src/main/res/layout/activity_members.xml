@@ -21,24 +21,23 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
         <Button
-            android:id="@+id/notifyButton"
+            android:id="@+id/members_action_button"
             android:visibility="invisible"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Notify Selected" />
+            android:text="Perform Action..." />
 
     </android.support.design.widget.AppBarLayout>
 
     <TableRow
-        android:id="@+id/tableRow3"
+        android:id="@+id/members_table_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="5dip" >
 
         <TextView
             android:id="@+id/members_column_1"
-            android:text="Column 1"
-            android:layout_span="2"
+            android:text="Name"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView

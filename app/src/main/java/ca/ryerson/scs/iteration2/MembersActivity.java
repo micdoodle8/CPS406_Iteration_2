@@ -1,10 +1,11 @@
 package ca.ryerson.scs.iteration2;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -15,10 +16,13 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MembersActivity extends AppCompatActivity {
 
     private int selectedCount = 0;
+    private CheckBox selectAllCheckbox;
+    private List<CheckBox> checkboxes = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,16 +34,63 @@ public class MembersActivity extends AppCompatActivity {
         boolean isCoach = getIntent().hasExtra("EXTRA_ISCOACH") && getIntent().getBooleanExtra("EXTRA_ISCOACH", false);
 
         TableLayout tableLayout = findViewById(R.id.members_layout);
-        Button notifyButton = findViewById(R.id.notifyButton);
-
-        TextView header1 = findViewById(R.id.members_column_1);
-        TableRow.LayoutParams params = (TableRow.LayoutParams) header1.getLayoutParams();
-        params.span = isCoach ? 2 : 1; // We want the header to span two rows if checkboxes are added
-        header1.setLayoutParams(params);
+        Button notifyButton = findViewById(R.id.members_action_button);
 
         Context context = getApplicationContext();
 
         final ArrayList<String> members = DBHandler.getInstance(context).getCustomers();
+
+        if (isCoach) {
+            TableRow headerRow = findViewById(R.id.members_table_header);
+            selectAllCheckbox = new CheckBox(context);
+            headerRow.addView(selectAllCheckbox, 0);
+            selectAllCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean selected) {
+                    // This is a select all / unselect all checkbox
+                    if (selected) {
+                        for (CheckBox box : checkboxes) {
+                            box.setChecked(true);
+                        }
+                    } else {
+                        for (CheckBox box : checkboxes) {
+                            box.setChecked(false);
+                        }
+                    }
+                }
+            });
+
+            notifyButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    CharSequence options[] = new CharSequence[] { "Notify Selected", "Remove Selected" };
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MembersActivity.this);
+                    builder.setTitle("Perform Action...");
+                    builder.setItems(options, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int item) {
+                            if (item == 0) {
+                                for (int i = 0; i < checkboxes.size(); ++i) {
+                                    CheckBox box = checkboxes.get(i);
+                                    if (box.isChecked()) {
+                                        // TODO Notify customer
+                                    }
+                                }
+                            } else if (item == 1) {
+                                for (int i = 0; i < checkboxes.size(); ++i) {
+                                    CheckBox box = checkboxes.get(i);
+                                    if (box.isChecked()) {
+                                        // TODO Remove customer
+                                    }
+                                }
+                            }
+                        }
+                    });
+                    builder.show();
+                }
+            });
+        }
 
         for (String member : members)
         {
@@ -49,6 +100,7 @@ public class MembersActivity extends AppCompatActivity {
                 // Coaches can check off members to perform certain actions
                 CheckBox checkBox = new CheckBox(context);
                 tableRow.addView(checkBox);
+                checkboxes.add(checkBox);
                 checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean selected) {
@@ -60,6 +112,7 @@ public class MembersActivity extends AppCompatActivity {
 
                         if (selectedCount <= 0) {
                             notifyButton.setVisibility(View.INVISIBLE);
+                            selectAllCheckbox.setChecked(false);
                         } else if (selectedCount == 1) {
                             notifyButton.setVisibility(View.VISIBLE);
                         }
@@ -81,59 +134,6 @@ public class MembersActivity extends AppCompatActivity {
 
             tableLayout.addView(tableRow);
         }
-
-
-
-
-
-
-
-
-//        GridView gridview = (GridView) findViewById(R.id.gridview);
-//
-//        final ArrayList<String> members = DBHandler.getInstance(context).getCustomers();
-//
-//
-//        gridview.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, members) {
-//            public View getView(int position, View convertView, ViewGroup parent) {
-//                View view = super.getView(position, convertView, parent);
-//                TextView tv = (TextView) view;
-//
-//                RelativeLayout.LayoutParams lp =  new RelativeLayout.LayoutParams(
-//                        RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT
-//                );
-//                tv.setLayoutParams(lp);
-//
-//                // Get the TextView LayoutParams
-//                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)tv.getLayoutParams();
-//
-//                // Set the TextView layout parameters
-//                tv.setLayoutParams(params);
-//
-//                // Display TextView text in center position
-//                tv.setGravity(Gravity.CENTER);
-//
-//                // Set the TextView text font family and text size
-//                tv.setTypeface(Typeface.SANS_SERIF, Typeface.NORMAL);
-//                tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-//
-//                // Set the TextView text (GridView item text)
-//                tv.setText(members.get(position));
-//
-//                // Set the TextView background color
-//                tv.setBackgroundColor(Color.parseColor("#FF65C6EB"));
-//
-//                // Return the TextView widget as GridView item
-//                return tv;
-//            }
-//        });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
     }
 
     @Override
