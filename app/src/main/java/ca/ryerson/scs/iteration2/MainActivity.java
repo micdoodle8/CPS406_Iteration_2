@@ -26,6 +26,9 @@ public class MainActivity extends AppCompatActivity {
             startActivity(openLogin);
         }
 
+
+        /*
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -57,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
+        */
 
 
 

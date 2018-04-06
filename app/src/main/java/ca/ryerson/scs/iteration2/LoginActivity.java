@@ -13,6 +13,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.View;
@@ -28,6 +29,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Auto-generated login template by Android Studio
+ *
  * A login screen that offers login via email/password.
  */
 public class LoginActivity extends AppCompatActivity {
@@ -185,21 +188,23 @@ public class LoginActivity extends AppCompatActivity {
      */
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
-        DBHandler db = DBHandler.getInstance(getApplicationContext());
-
+        DBHandler db;
         private final String mEmail;
         private final String mPassword;
-
+        private String userType;
 
         UserLoginTask(String email, String password) {
+            db = DBHandler.getInstance(getApplicationContext());
             mEmail = email;
             mPassword = password;
+            userType = "";
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
-
-            if (db.authenticate(mEmail, mPassword)) return true;
+            userType = db.authenticate(mEmail, mPassword);
+            Log.d("------->", userType);
+            if (!userType.isEmpty()) return true;
 
             createNewAccount(mEmail, mPassword);
             return true;
@@ -211,6 +216,25 @@ public class LoginActivity extends AppCompatActivity {
             showProgress(false);
 
             if (success) {
+
+                if (userType.equals("CUSTOMER")){
+                    Intent customerActivity = new Intent(LoginActivity.this, MembersActivity.class);
+                    LoginActivity.this.startActivity(customerActivity);
+                }
+                else if (userType.equals("COACH")){
+                    Intent coachActivity = new Intent(LoginActivity.this, CoachActivity.class);
+                    LoginActivity.this.startActivity(coachActivity);
+                }
+                else if (userType.equals("TREASURER")){
+                    Intent treasurerActivity = new Intent(LoginActivity.this, FinancesActivity.class);
+                    LoginActivity.this.startActivity(treasurerActivity);
+                }
+                else {
+                    Intent placeholder = new Intent(LoginActivity.this, FinancesActivity.class);
+                    LoginActivity.this.startActivity(placeholder);
+                }
+
+
                 finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
