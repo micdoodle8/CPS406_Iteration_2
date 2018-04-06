@@ -16,4 +16,5 @@
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
     <string name="title_activity_register">Register</string>
+    <string name="button_send">Send</string>
 </resources>
