@@ -1,27 +1,24 @@
 package ca.ryerson.scs.iteration2;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.GridView;
-import android.widget.RelativeLayout;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
 public class MembersActivity extends AppCompatActivity {
+
+    private int selectedCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,45 +27,98 @@ public class MembersActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        GridView gridview = (GridView) findViewById(R.id.gridview);
+//        TableRow.LayoutParams rowParams = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
+
+        TableLayout tableLayout = findViewById(R.id.members_layout);
+        Button notifyButton = findViewById(R.id.notifyButton);
 
         Context context = getApplicationContext();
+
         final ArrayList<String> members = DBHandler.getInstance(context).getCustomers();
 
+        for (String member : members)
+        {
+            TableRow tableRow = new TableRow(context);
 
-        gridview.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, members) {
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View view = super.getView(position, convertView, parent);
-                TextView tv = (TextView) view;
+            CheckBox checkBox = new CheckBox(context);
+            tableRow.addView(checkBox);
+            checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean selected) {
+                    if (selected) {
+                        selectedCount++;
+                    } else {
+                        selectedCount--;
+                    }
 
-                RelativeLayout.LayoutParams lp =  new RelativeLayout.LayoutParams(
-                        RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT
-                );
-                tv.setLayoutParams(lp);
+                    if (selectedCount <= 0) {
+                        notifyButton.setVisibility(View.INVISIBLE);
+                    } else if (selectedCount == 1) {
+                        notifyButton.setVisibility(View.VISIBLE);
+                    }
+                }
+            });
 
-                // Get the TextView LayoutParams
-                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)tv.getLayoutParams();
+            TextView column1 = new TextView(context);
+            column1.setText(member);
+            tableRow.addView(column1);
 
-                // Set the TextView layout parameters
-                tv.setLayoutParams(params);
+            TextView column2 = new TextView(context);
+            column2.setText("Some data");
+            tableRow.addView(column2);
 
-                // Display TextView text in center position
-                tv.setGravity(Gravity.CENTER);
+            TextView column3 = new TextView(context);
+            column3.setText("Some data");
+            tableRow.addView(column3);
 
-                // Set the TextView text font family and text size
-                tv.setTypeface(Typeface.SANS_SERIF, Typeface.NORMAL);
-                tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+            tableLayout.addView(tableRow);
+        }
 
-                // Set the TextView text (GridView item text)
-                tv.setText(members.get(position));
 
-                // Set the TextView background color
-                tv.setBackgroundColor(Color.parseColor("#FF65C6EB"));
 
-                // Return the TextView widget as GridView item
-                return tv;
-            }
-        });
+
+
+
+
+
+//        GridView gridview = (GridView) findViewById(R.id.gridview);
+//
+//        final ArrayList<String> members = DBHandler.getInstance(context).getCustomers();
+//
+//
+//        gridview.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, members) {
+//            public View getView(int position, View convertView, ViewGroup parent) {
+//                View view = super.getView(position, convertView, parent);
+//                TextView tv = (TextView) view;
+//
+//                RelativeLayout.LayoutParams lp =  new RelativeLayout.LayoutParams(
+//                        RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT
+//                );
+//                tv.setLayoutParams(lp);
+//
+//                // Get the TextView LayoutParams
+//                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)tv.getLayoutParams();
+//
+//                // Set the TextView layout parameters
+//                tv.setLayoutParams(params);
+//
+//                // Display TextView text in center position
+//                tv.setGravity(Gravity.CENTER);
+//
+//                // Set the TextView text font family and text size
+//                tv.setTypeface(Typeface.SANS_SERIF, Typeface.NORMAL);
+//                tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+//
+//                // Set the TextView text (GridView item text)
+//                tv.setText(members.get(position));
+//
+//                // Set the TextView background color
+//                tv.setBackgroundColor(Color.parseColor("#FF65C6EB"));
+//
+//                // Return the TextView widget as GridView item
+//                return tv;
+//            }
+//        });
     }
 
     @Override
