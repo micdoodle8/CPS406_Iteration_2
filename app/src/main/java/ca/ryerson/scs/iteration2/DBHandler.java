@@ -162,6 +162,7 @@ public class DBHandler extends SQLiteOpenHelper {
         db.execSQL("INSERT INTO USER (EMAIL, PASSWORD, ROLE, ASSOCIATED_ID) VALUES('jsmith@mail.com', 'password', 'CUSTOMER', 1) ");
         db.execSQL("INSERT INTO USER (EMAIL, PASSWORD, ROLE, ASSOCIATED_ID) VALUES('peter@mail.com', 'hello', 'CUSTOMER', 2) ");
         db.execSQL("INSERT INTO USER (EMAIL, PASSWORD, ROLE, ASSOCIATED_ID) VALUES('tom@mail.com', 'ohwee', 'COACH', 1) ");
+        db.execSQL("INSERT INTO USER (EMAIL, PASSWORD, ROLE, ASSOCIATED_ID) VALUES('treasurer@mail.com', 'admin', 'TREASURER', 1) ");
 
     }
 
