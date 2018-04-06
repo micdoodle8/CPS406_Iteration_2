@@ -222,7 +222,7 @@ public class LoginActivity extends AppCompatActivity {
                             LoginActivity.this.startActivity(coachActivity);
                             break;
                         case "TREASURER":
-                            Intent treasurerActivity = new Intent(LoginActivity.this, FinancesActivity.class);
+                            Intent treasurerActivity = new Intent(LoginActivity.this, TreasurerActivity.class);
                             LoginActivity.this.startActivity(treasurerActivity);
                             break;
                         default:
