@@ -2,11 +2,9 @@ package ca.ryerson.scs.iteration2;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -22,13 +20,14 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 /**
- * A login screen that offers login via inputEmail/password.
+ * Auto-generated login template by Android Studio
+ *
+ * In this activity the user can register a new customer/coach account
  */
 public class RegisterActivity extends AppCompatActivity {
 
-    private UserLoginTask mAuthTask = null;
+    private UserRegisterTask mAuthTask = null;
 
-    // UI references.
     private EditText mNameView;
     private EditText mLastNameView;
     private AutoCompleteTextView mEmailView;
@@ -47,7 +46,6 @@ public class RegisterActivity extends AppCompatActivity {
         String password = getIntent().getStringExtra("EXTRA_PASSWORD");
 
         setContentView(R.layout.activity_register);
-        // Set up the login form.
         mNameView = (EditText) findViewById(R.id.name);
         mLastNameView = (EditText) findViewById(R.id.name_last);
         mEmailView = (AutoCompleteTextView) findViewById(R.id.inputEmailReg);
@@ -125,11 +123,11 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
-        // Reset errors.
+        // Clear errors
         mEmailView.setError(null);
         mPasswordView.setError(null);
 
-        // Store values at the time of the login attempt.
+        // Retrieve values
         String name = mNameView.getText().toString();
         String lastName = mLastNameView.getText().toString();
         String email = mEmailView.getText().toString();
@@ -138,21 +136,21 @@ public class RegisterActivity extends AppCompatActivity {
         boolean cancel = false;
         View focusView = null;
 
-        // Check for a valid name
+        // Check name is valid
         if (TextUtils.isEmpty(name)) {
             mNameView.setError(getString(R.string.error_field_required));
             focusView = mNameView;
             cancel = true;
         }
 
-        // Check for a valid last name
+        // Check last name is valid
         if (TextUtils.isEmpty(lastName)) {
             mLastNameView.setError(getString(R.string.error_field_required));
             focusView = mLastNameView;
             cancel = true;
         }
 
-        // Check for a valid password, if the user entered one.
+        // Check password is valid
         if (TextUtils.isEmpty(password)) {
             mPasswordView.setError(getString(R.string.error_field_required));
             focusView = mPasswordView;
@@ -164,7 +162,7 @@ public class RegisterActivity extends AppCompatActivity {
             cancel = true;
         }
 
-        // Check for a valid inputEmail address.
+        // Check email is valid
         if (TextUtils.isEmpty(email)) {
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
@@ -176,59 +174,45 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
+            // An error occurred somewhere, don't focus on the invalid field
             focusView.requestFocus();
         } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
+            // Start login process
             showProgress(true);
-            mAuthTask = new UserLoginTask(name + " " + lastName, email, password, isCoach.isChecked(), mCoachHourlyRate);
+            mAuthTask = new UserRegisterTask(name + " " + lastName, email, password, isCoach.isChecked(), mCoachHourlyRate);
             mAuthTask.execute((Void) null);
         }
     }
 
     /**
-     * Shows the progress UI and hides the login form.
+     * Display login progress
      */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+        int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-                }
-            });
+        mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+        mLoginFormView.animate().setDuration(shortAnimTime).alpha(
+                show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            }
+        });
 
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mProgressView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-                }
-            });
-        } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-        }
+        mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+        mProgressView.animate().setDuration(shortAnimTime).alpha(
+                show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            }
+        });
     }
 
     /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
+     * Represents the registration task, which can be executed asynchronously
      */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+    public class UserRegisterTask extends AsyncTask<Void, Void, Boolean> {
 
         private final String mFullName;
         private final String mEmail;
@@ -236,7 +220,7 @@ public class RegisterActivity extends AppCompatActivity {
         private final boolean mIsCoach;
         private final double mCoachHourlyRate;
 
-        UserLoginTask(String fullName, String email, String password, boolean isCoach, double coachHourlyRate) {
+        UserRegisterTask(String fullName, String email, String password, boolean isCoach, double coachHourlyRate) {
             mFullName = fullName;
             mEmail = email;
             mPassword = password;
@@ -247,7 +231,6 @@ public class RegisterActivity extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(Void... params) {
 
-            // Add the customer to the DB
             Context context = getApplicationContext();
             DBHandler handler = DBHandler.getInstance(context);
 
@@ -270,11 +253,6 @@ public class RegisterActivity extends AppCompatActivity {
                 RegisterActivity.this.startActivity(customerActivity);
             }
 
-            // Open main activity
-//            Intent openMain = new Intent(RegisterActivity.this, MainActivity.class);
-//            openMain.putExtra("EXTRA_LOGGED_IN_EMAIL", mEmail);
-//            startActivity(openMain);
-
             return true;
         }
 
@@ -285,9 +263,6 @@ public class RegisterActivity extends AppCompatActivity {
 
             if (success) {
                 finish();
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
             }
         }
 
