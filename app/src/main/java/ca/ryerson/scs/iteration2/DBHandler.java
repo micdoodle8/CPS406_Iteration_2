@@ -182,6 +182,20 @@ public class DBHandler extends SQLiteOpenHelper {
         return cursor.moveToFirst();
     }
 
+    //Inserts new user into the database
+    public void addNewUser(String email, String password, String role, int id) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(MEMContract.User.EMAIL, email);
+        values.put(MEMContract.User.PASSWORD, password);
+        values.put(MEMContract.User.ROLE, role);
+        values.put(MEMContract.User.ASSOCIATED_ID, id);
+
+        db.insert(MEMContract.User.TABLE_NAME, null, values);
+        db.close();
+    }
 
     ///Executes the provided query directly
     public void executeSQL(String sql){
@@ -195,6 +209,17 @@ public class DBHandler extends SQLiteOpenHelper {
         ArrayList<String> names = new ArrayList<>();
 
         Cursor cursor = db.rawQuery("SELECT NAME FROM CUSTOMER", null);
+        while (cursor.moveToNext()) names.add(cursor.getString(0));
+
+        return names;
+    }
+
+    //Returns a list of all coach names
+    public ArrayList<String> getCoaches() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ArrayList<String> names = new ArrayList<>();
+
+        Cursor cursor = db.rawQuery("SELECT NAME FROM COACH", null);
         while (cursor.moveToNext()) names.add(cursor.getString(0));
 
         return names;

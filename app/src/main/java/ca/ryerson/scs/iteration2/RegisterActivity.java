@@ -13,10 +13,12 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.SeekBar;
+import android.widget.Switch;
 import android.widget.TextView;
 
 /**
@@ -33,6 +35,8 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private Switch isCoach;
+    private int mCoachHourlyRate = 15;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,19 +62,52 @@ public class RegisterActivity extends AppCompatActivity {
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
-                    register();
-                    return true;
-                }
                 return false;
             }
         });
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button_reg);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
+        Button mRegisterButtonCustomer = (Button) findViewById(R.id.register_button);
+        mRegisterButtonCustomer.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 register();
+            }
+        });
+
+        TextView label = findViewById(R.id.register_rate_label);
+        SeekBar bar = findViewById(R.id.register_rate_bar);
+
+        isCoach = findViewById(R.id.coach_switch);
+        isCoach.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if (isChecked) {
+                    label.setVisibility(View.VISIBLE);
+                    bar.setVisibility(View.VISIBLE);
+                } else {
+                    label.setVisibility(View.GONE);
+                    bar.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        int step = 1;
+        int max = 50;
+        int min = 15;
+        bar.setMax((max - min) / step);
+        bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                mCoachHourlyRate = (min + (i * step));
+                label.setText("Hourly Rate: $" + mCoachHourlyRate);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
             }
         });
 
@@ -146,7 +183,7 @@ public class RegisterActivity extends AppCompatActivity {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(name + " " + lastName, email, password);
+            mAuthTask = new UserLoginTask(name + " " + lastName, email, password, isCoach.isChecked(), mCoachHourlyRate);
             mAuthTask.execute((Void) null);
         }
     }
@@ -196,11 +233,15 @@ public class RegisterActivity extends AppCompatActivity {
         private final String mFullName;
         private final String mEmail;
         private final String mPassword;
+        private final boolean mIsCoach;
+        private final double mCoachHourlyRate;
 
-        UserLoginTask(String fullName, String email, String password) {
+        UserLoginTask(String fullName, String email, String password, boolean isCoach, double coachHourlyRate) {
             mFullName = fullName;
             mEmail = email;
             mPassword = password;
+            mIsCoach = isCoach;
+            mCoachHourlyRate = coachHourlyRate;
         }
 
         @Override
@@ -208,7 +249,21 @@ public class RegisterActivity extends AppCompatActivity {
 
             // Add the customer to the DB
             Context context = getApplicationContext();
-            DBHandler.getInstance(context).addNewCustomer(mFullName, mEmail);
+            DBHandler handler = DBHandler.getInstance(context);
+
+            if (mIsCoach)
+            {
+                // Register as coach
+                handler.addNewCoach(mFullName, mCoachHourlyRate);
+                handler.addNewUser(mEmail, mPassword, "COACH", handler.getCoaches().size() + 1);
+            }
+            else
+            {
+                // Register as customer
+                handler.addNewCustomer(mFullName, mEmail);
+                handler.addNewUser(mEmail, mPassword, "CUSTOMER", handler.getCustomers().size() + 1);
+            }
+
 
             // Open main activity
             Intent openMain = new Intent(RegisterActivity.this, MainActivity.class);
