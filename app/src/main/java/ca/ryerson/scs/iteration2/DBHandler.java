@@ -173,13 +173,13 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
 
-    public boolean authenticate(String email, String password){
+    public String authenticate(String email, String password){
         SQLiteDatabase db = this.getWritableDatabase();
 
-        //Not finished yet
+        Cursor cursor = db.rawQuery("SELECT * FROM USER WHERE EMAIL = ? AND PASSWORD = ? ", new String[] {email, password});
+        cursor.moveToFirst();
 
-        Cursor cursor = db.rawQuery("SELECT * FROM USER WHERE EMAIL = ? AND PASSWORD = ? ", new String[] {"\"" + email + "\"", "\"" + password + "\""});
-        return cursor.moveToFirst();
+        return cursor.getString(3);
     }
 
     //Inserts new user into the database
