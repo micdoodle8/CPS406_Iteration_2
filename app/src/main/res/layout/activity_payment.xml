@@ -5,7 +5,7 @@
     android:id="@+id/txt_title"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.sarmiran.myapplication.PaymentActivity">
+    tools:context="ca.ryerson.scs.iteration2.PaymentActivity">
 
     <Button
         android:id="@+id/button2"
