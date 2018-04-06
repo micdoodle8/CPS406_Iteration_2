@@ -13,20 +13,23 @@ public class DBHandler extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "MEM";
+    private static DBHandler instance = null;
 
     String[] creators = new String[]{ CREATE_ATTENDEE_TABLE,
             CREATE_CUSTOMER_TABLE,
             CREATE_MEETING_TABLE,
             CREATE_PAYMENT_TABLE,
             CREATE_HALL_TABLE,
-            CREATE_COACH_TABLE};
+            CREATE_COACH_TABLE,
+            CREATE_USER_TABLE};
 
     String[] deletors = new String[]{DELETE_ATTENDEE_TABLE,
             DELETE_CUSTOMER_TABLE,
             DELETE_MEETING_TABLE,
             DELETE_PAYMENT_TABLE,
             DELETE_HALL_TABLE,
-            DELETE_COACH_TABLE};
+            DELETE_COACH_TABLE,
+            DELETE_USER_TABLE};
 
     private static final String CREATE_ATTENDEE_TABLE =
             "CREATE TABLE " + MEMContract.Attendee.TABLE_NAME + " (" +
@@ -87,12 +90,18 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String DELETE_COACH_TABLE =
             "DROP TABLE IF EXISTS " + MEMContract.Coach.TABLE_NAME;
 
+    private static final String CREATE_USER_TABLE =
+            "CREATE TABLE " + MEMContract.User.TABLE_NAME + " (" +
+                    MEMContract.User._ID + " INTEGER PRIMARY KEY," +
+                    MEMContract.User.EMAIL + " TEXT," +
+                    MEMContract.User.PASSWORD + " TEXT," +
+                    MEMContract.User.ROLE + " TEXT," +
+                    MEMContract.User.ASSOCIATED_ID + " INTEGER)";
 
-    private static DBHandler instance = null;
+    private static final String DELETE_USER_TABLE =
+            "DROP TABLE IF EXISTS " + MEMContract.User.TABLE_NAME;
 
-    private DBHandler(Context contex) {
-        super(contex, DATABASE_NAME, null, DATABASE_VERSION);
-    }
+    public DBHandler(Context contex) { super(contex, DATABASE_NAME, null, DATABASE_VERSION); }
 
     /**
      * Get the handle instance
@@ -104,7 +113,7 @@ public class DBHandler extends SQLiteOpenHelper {
         if (instance == null)
         {
             // Create handler
-            context.deleteDatabase("MEM");
+            context.deleteDatabase(DATABASE_NAME);
             instance = new DBHandler(context);
             instance.populateDummyData();
         }
@@ -129,8 +138,8 @@ public class DBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         db.execSQL("INSERT INTO CUSTOMER (NAME, EMAIL, CONSECUTIVE_PAYMENT) VALUES('John Smith', 'jsmith@mail.com', '2018-01-04 00:00:00') ");
-        db.execSQL("INSERT INTO CUSTOMER (NAME, EMAIL, CONSECUTIVE_PAYMENT) VALUES('Xi Jin Ping', 'supremeleader@mail.com', '2018-03-20 00:00:00') ");
-        db.execSQL("INSERT INTO CUSTOMER (NAME, EMAIL, CONSECUTIVE_PAYMENT) VALUES('Peter Griffin', 'numnuts@mail.com', '2018-03-15 00:00:00') ");
+        db.execSQL("INSERT INTO CUSTOMER (NAME, EMAIL, CONSECUTIVE_PAYMENT) VALUES('Xi Jin Ping', 'xi@mail.com', '2018-03-20 00:00:00') ");
+        db.execSQL("INSERT INTO CUSTOMER (NAME, EMAIL, CONSECUTIVE_PAYMENT) VALUES('Peter Griffin', 'peter@mail.com', '2018-03-15 00:00:00') ");
 
         db.execSQL("INSERT INTO HALL (NAME, RATE) VALUES('Main practice hall', 12) ");
         db.execSQL("INSERT INTO HALL (NAME, RATE) VALUES('East wing gym', 11) ");
@@ -150,16 +159,27 @@ public class DBHandler extends SQLiteOpenHelper {
         db.execSQL("INSERT INTO COACH (NAME, RATE) VALUES('Tom Coughlin', 14) ");
         db.execSQL("INSERT INTO COACH (NAME, RATE) VALUES('Bobby Bowden', 13) ");
 
+
+        db.execSQL("INSERT INTO USER (EMAIL, PASSWORD, ROLE, ASSOCIATED_ID) VALUES('jsmith@mail.com', 'password', 'CUSTOMER', 1) ");
+        db.execSQL("INSERT INTO USER (EMAIL, PASSWORD, ROLE, ASSOCIATED_ID) VALUES('peter@mail.com', 'hello', 'CUSTOMER', 2) ");
+        db.execSQL("INSERT INTO USER (EMAIL, PASSWORD, ROLE, ASSOCIATED_ID) VALUES('tom@mail.com', 'ohwee', 'COACH', 1) ");
+
     }
 
     public void getCustomer( int id){
         SQLiteDatabase db = this.getWritableDatabase();
-
         Cursor cursor = db.rawQuery("SELECT NAME FROM CUSTOMER WHERE _ID = " + id, null);
         cursor.moveToFirst();
+    }
 
-        //Log.d("STATE", cursor.getString(0));
 
+    public boolean authenticate(String email, String password){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        //Not finished yet
+
+        Cursor cursor = db.rawQuery("SELECT * FROM USER WHERE EMAIL = ? AND PASSWORD = ? ", new String[] {"\"" + email + "\"", "\"" + password + "\""});
+        return cursor.moveToFirst();
     }
 
 

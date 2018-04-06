@@ -46,4 +46,12 @@ public final class MEMContract {
         public static final String NAME = "NAME";
         public static final String RATE = "RATE";
     }
+
+    public static class User implements BaseColumns {
+        public static final String TABLE_NAME = "USER";
+        public static final String EMAIL = "EMAIL";
+        public static final String PASSWORD = "PASSWORD";
+        public static final String ROLE = "ROLE";
+        public static final String ASSOCIATED_ID = "ASSOCIATED_ID";
+    }
 }
