@@ -203,7 +203,6 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(Void... params) {
             userType = db.authenticate(mEmail, mPassword);
-            Log.d("------->", userType);
             if (!userType.isEmpty()) return true;
 
             createNewAccount(mEmail, mPassword);

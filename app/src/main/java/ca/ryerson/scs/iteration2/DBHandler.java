@@ -177,12 +177,14 @@ public class DBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         Cursor cursor = db.rawQuery("SELECT * FROM USER WHERE EMAIL = ? AND PASSWORD = ? ", new String[] {email, password});
-        cursor.moveToFirst();
-
-        int index = cursor.getColumnIndex("ROLE");
-        if (index >= 0) {
-            return cursor.getString(index);
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            int index = cursor.getColumnIndex("ROLE");
+            if (index >= 0) {
+                return cursor.getString(index);
+            }
         }
+        else return "";
 
         return "";
     }
