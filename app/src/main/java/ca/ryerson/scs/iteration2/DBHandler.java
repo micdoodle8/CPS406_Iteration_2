@@ -327,7 +327,7 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     //Inserts new meeting into the database
-    public void MeetingCreation(int coach_ID, int hall_ID, String date, int rate){
+    public void meetingCreation(int coach_ID, int hall_ID, String date, int rate){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
@@ -336,12 +336,12 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(MEMContract.Meeting.ORGANIZER, coach_ID);
         values.put(MEMContract.Meeting.RATE, rate);
 
-        db.insert(MEMContract.Attendee.TABLE_NAME, null, values);
+        db.insert(MEMContract.Meeting.TABLE_NAME, null, values);
         db.close();
     }
 
     //Inserts new Attendee info in and checks if a discount is needed
-    public void MeetingSignUp(int customer_ID, int meeting_ID){
+    public void meetingSignUp(int customer_ID, int meeting_ID){
         int discount = 0;
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -362,7 +362,7 @@ public class DBHandler extends SQLiteOpenHelper {
     //When a customer pays it updates their last consecutive payment time
     //It also checks the rate for the meeting they are paying for, and if they had a discount
     //If so it changes the total payment based on the discount then multiplies the final number
-    public boolean CustomerPaid(int id, String date, int attendee_ID){
+    public boolean customerPaid(int id, String date, int attendee_ID){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         boolean Updated = false;
