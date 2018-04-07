@@ -3,18 +3,22 @@ package ca.ryerson.scs.iteration2;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,22 +71,19 @@ public class MembersActivity extends AppCompatActivity {
 
                     builder.setItems(options, (dialogInterface, item) -> {
 
-                            if (item == 0) {
-                                for (int i = 0; i < checkboxes.size(); ++i) {
-                                    CheckBox box = checkboxes.get(i);
-                                    if (box.isChecked()) {
-
-
-                                    }
-                                }
-                            } else if (item == 1) {
-                                for (int i = 0; i < checkboxes.size(); ++i) {
-                                    CheckBox box = checkboxes.get(i);
-                                    if (box.isChecked()) {
-                                        Log.d("------->", "remove");
-                                    }
-                                }
+                        List<Customer> selectedCustomers = new ArrayList<>();
+                        for (int i = 0; i < checkboxes.size(); ++i) {
+                            CheckBox box = checkboxes.get(i);
+                            if (box.isChecked()) {
+                                selectedCustomers.add(members.get(i));
                             }
+                        }
+
+                        if (item == 0) {
+                            openMessageDialog(selectedCustomers);
+                        } else if (item == 1) {
+                            Log.d("------->", "remove");
+                        }
                     });
                     builder.show();
             });
@@ -126,6 +127,34 @@ public class MembersActivity extends AppCompatActivity {
 
             tableLayout.addView(tableRow);
         }
+    }
+
+    private void openMessageDialog(List<Customer> selectedCustomers) {
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+        builder1.setTitle("Send Message");
+
+        EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE);
+        builder1.setView(input);
+
+        builder1.setPositiveButton("OK", (dialogInterface12, i12) -> {
+            String customerEmails[] = new String[selectedCustomers.size()];
+            for (int i = 0; i < selectedCustomers.size(); ++i) {
+                customerEmails[i] = selectedCustomers.get(i).getEmail();
+            }
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("message/rfc822");
+            intent.putExtra(Intent.EXTRA_EMAIL, customerEmails);
+            intent.putExtra(Intent.EXTRA_SUBJECT, "Message from your Coach");
+            intent.putExtra(Intent.EXTRA_TEXT, input.getText().toString());
+            try {
+                startActivity(Intent.createChooser(intent, "Send mail..."));
+            } catch (android.content.ActivityNotFoundException ex) {
+                Toast.makeText(MembersActivity.this, "No email clients installed.", Toast.LENGTH_SHORT).show();
+            }
+        });
+        builder1.setNegativeButton("Cancel", (dialogInterface1, i1) -> dialogInterface1.cancel());
+        builder1.show();
     }
 
     @Override
