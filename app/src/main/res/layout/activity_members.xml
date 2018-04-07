@@ -42,13 +42,7 @@
 
         <TextView
             android:id="@+id/members_column_2"
-            android:text="Column 2"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        <TextView
-            android:id="@+id/members_column_3"
-            android:layout_width="wrap_content"
-            android:text="Column 3"
+            android:text="Email"
             android:textAppearance="?android:attr/textAppearanceMedium" />
     </TableRow>
 
