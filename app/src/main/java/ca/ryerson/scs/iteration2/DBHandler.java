@@ -249,7 +249,7 @@ public class DBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ArrayList<String> info = new ArrayList<>();
 
-        Cursor cursor = db.rawQuery("SELECT NAME, EMAIL FROM CUSTOMER WHERE CONSECUTIVE_PAYMENT < 0", null);
+        Cursor cursor = db.rawQuery("SELECT NAME, EMAIL FROM CUSTOMER JOIN CUSTOMER ON ATTENDEES.Customer_ID = CUSTOMER._ID JOIN ATTENDEES ON ATTENDEES.Meeting_ID = MEETINGS._ID WHERE MEETINGS.date > CONSECUTIVE_PAY ", null);
         while (cursor.moveToNext()) info.add(cursor.getString(0) + " " + cursor.getString(1));
 
         return info;
