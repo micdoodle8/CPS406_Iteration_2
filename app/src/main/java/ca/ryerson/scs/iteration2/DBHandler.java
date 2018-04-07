@@ -353,9 +353,9 @@ public class DBHandler extends SQLiteOpenHelper {
         if (cursor.getString(0) != "") {lastPayment = cursor.getString(0);}
 
         cursor = db.rawQuery("SELECT DATE FROM MEETINGS " +
-                                        "JOIN ATTENDEES ON MEETINGS._ID = ATTENDEES.MEETING_ID " +
-                                        "JOIN CUSTOMERS ON ATTENDEES.Customer_ID = CUSTOMER._ID " +
-                                        "WHERE CUSTOMERS._ID = " + customer_ID, null);
+                                        "JOIN ATTENDEE ON MEETING._ID = ATTENDEE.MEETING_ID " +
+                                        "JOIN CUSTOMER ON ATTENDEES.Customer_ID = CUSTOMER._ID " +
+                                        "WHERE CUSTOMER._ID = " + customer_ID, null);
         int i = 0, discount = 0, unPaidMeetings = 0;
         while (cursor.moveToNext()) {
             info.add(cursor.getString(0));
@@ -396,7 +396,7 @@ public class DBHandler extends SQLiteOpenHelper {
         cursor.moveToFirst();
         meetingID = cursor.getInt(0);
 
-        cursor = db.rawQuery("SELECT RATE FROM MEETINGS WHERE _ID = " + meetingID, null);
+        cursor = db.rawQuery("SELECT RATE FROM MEETING WHERE _ID = " + meetingID, null);
         cursor.moveToFirst();
         Payment = cursor.getInt(0);
 
@@ -445,7 +445,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public double getCoachPayments(){
         SQLiteDatabase db = this.getWritableDatabase();
 
-        Cursor cursor = db.rawQuery("SELECT SUM(COACH.rate) as AmountOwed FROM MEETINGS JOIN COACH ON MEETINGS.Organizer = COACH.ID WHERE date BETWEEN '1000-01-01 00:00:00' AND '3000-01-01 00:00:00'", null);
+        Cursor cursor = db.rawQuery("SELECT SUM(COACH.rate) as AmountOwed FROM MEETING JOIN COACH ON MEETING.Organizer = COACH._ID WHERE date BETWEEN '1000-01-01 00:00:00' AND '3000-01-01 00:00:00'", null);
         cursor.moveToFirst();
         return Double.parseDouble(cursor.getString(0));
     }
@@ -453,7 +453,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public double getCoachPayments(String EarlyDate, String LaterDate){
         SQLiteDatabase db = this.getWritableDatabase();
 
-        Cursor cursor = db.rawQuery("SELECT SUM(COACH.rate) as AmountOwed FROM MEETINGS JOIN COACH ON MEETINGS.Organizer = COACH.ID WHERE date BETWEEN " + EarlyDate + " AND " + LaterDate, null);
+        Cursor cursor = db.rawQuery("SELECT SUM(COACH.rate) as AmountOwed FROM MEETING JOIN COACH ON MEETING.Organizer = COACH._ID WHERE date BETWEEN " + EarlyDate + " AND " + LaterDate, null);
         cursor.moveToFirst();
         return Double.parseDouble(cursor.getString(0));
     }
@@ -461,7 +461,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public double getHallPayments(){
         SQLiteDatabase db = this.getWritableDatabase();
 
-        Cursor cursor = db.rawQuery("SELECT SUM(HALLS.Rate) as AmountOwed FROM MEETINGS JOIN HALLS ON MEETINGS.Hall_ID WHERE date BETWEEN '1000-01-01 00:00:00' AND '3000-01-01 00:00:00'", null);
+        Cursor cursor = db.rawQuery("SELECT SUM(HALLS.Rate) as AmountOwed FROM MEETING JOIN HALLS ON MEETING.Hall_ID WHERE date BETWEEN '1000-01-01 00:00:00' AND '3000-01-01 00:00:00'", null);
         cursor.moveToFirst();
         return Double.parseDouble(cursor.getString(0));
     }
@@ -469,7 +469,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public double getHallPayments(String EarlyDate, String LaterDate){
         SQLiteDatabase db = this.getWritableDatabase();
 
-        Cursor cursor = db.rawQuery("SELECT SUM(HALLS.Rate) as AmountOwed FROM MEETINGS JOIN HALLS ON MEETINGS.Hall_ID WHERE date BETWEEN " + EarlyDate + " AND " + LaterDate, null);
+        Cursor cursor = db.rawQuery("SELECT SUM(HALLS.Rate) as AmountOwed FROM MEETING JOIN HALLS ON MEETING.Hall_ID WHERE date BETWEEN " + EarlyDate + " AND " + LaterDate, null);
         cursor.moveToFirst();
         return Double.parseDouble(cursor.getString(0));
     }
