@@ -266,22 +266,6 @@ public class DBHandler extends SQLiteOpenHelper {
 
         return OwedMoney;
     }
-    //Returns the money earned
-    public String MoneyEarned(String EarlyDate, String LaterDate){
-        SQLiteDatabase db = this.getWritableDatabase();
-        String EarnedMoney = "";
-
-        Cursor cursor = db.rawQuery("SELECT SUM(AMOUNT) as AmountEarned FROM PAYMENT WHERE date BETWEEN " + EarlyDate + " AND " + LaterDate, null);
-        cursor.moveToFirst();
-        EarnedMoney = cursor.getString(0);
-
-        return EarnedMoney;
-    }
-
-
-
-
-
 
 
     //Inserts new customer into the database
@@ -418,9 +402,25 @@ public class DBHandler extends SQLiteOpenHelper {
         return Updated;
     }
 
-    public double getRevenue() {
-        // TODO
-        return 0.0;
+    public double getRevenue(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String EarnedMoney = "";
+
+        Cursor cursor = db.rawQuery("SELECT SUM(AMOUNT) as AmountEarned FROM PAYMENT WHERE date BETWEEN '1000-01-01 00:00:00' AND '3000-01-01 00:00:00'", null);
+        cursor.moveToFirst();
+        EarnedMoney = cursor.getString(0);
+
+        return Double.parseDouble(EarnedMoney);
+    }
+    public double getRevenue(String EarlyDate, String LaterDate){
+            SQLiteDatabase db = this.getWritableDatabase();
+            String EarnedMoney = "";
+
+            Cursor cursor = db.rawQuery("SELECT SUM(AMOUNT) as AmountEarned FROM PAYMENT WHERE date BETWEEN " + EarlyDate + " AND " + LaterDate, null);
+            cursor.moveToFirst();
+            EarnedMoney = cursor.getString(0);
+
+            return Double.parseDouble(EarnedMoney);
     }
 
     public double getProfit() {
