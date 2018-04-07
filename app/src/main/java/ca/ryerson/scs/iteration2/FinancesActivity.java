@@ -34,13 +34,13 @@ public class FinancesActivity extends AppCompatActivity {
                 "Revenue",
                 "$" + String.format(Locale.CANADA, "%.2f", handler.getRevenue()),
                 "Profit",
-                "$" + String.format(Locale.CANADA, "%.2f", handler.getProfit()),
+                "$" + String.format(Locale.CANADA, "%.2f", 1.0),
                 "Coach Payments",
-                "$" + String.format(Locale.CANADA, "%.2f", handler.getCoachPayments()),
+                "$" + String.format(Locale.CANADA, "%.2f", 1.0),
                 "Hall Expenses",
-                "$" + String.format(Locale.CANADA, "%.2f", handler.getHallPayments()),
+                "$" + String.format(Locale.CANADA, "%.2f", 1.0),
                 "Misc Expenses",
-                "$" + String.format(Locale.CANADA, "%.2f", handler.getOtherExpenses())
+                "$" + String.format(Locale.CANADA, "%.2f", 1.0)
         };
 
         for (int i = 0; i < data.length; i += 2)

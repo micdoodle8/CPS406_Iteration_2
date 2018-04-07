@@ -425,17 +425,19 @@ public class DBHandler extends SQLiteOpenHelper {
         cursor.moveToFirst();
         return Double.parseDouble(cursor.getString(0));
     }
-    public double getRevenue(String EarlyDate, String LaterDate){
-            SQLiteDatabase db = this.getWritableDatabase();
 
-            Cursor cursor = db.rawQuery("SELECT SUM(AMOUNT) as AmountEarned FROM PAYMENT WHERE date BETWEEN " + EarlyDate + " AND " + LaterDate, null);
-            cursor.moveToFirst();
-            return Double.parseDouble(cursor.getString(0));
+    public double getRevenue(String EarlyDate, String LaterDate){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT SUM(AMOUNT) as AmountEarned FROM PAYMENT WHERE date BETWEEN " + EarlyDate + " AND " + LaterDate, null);
+        cursor.moveToFirst();
+        return Double.parseDouble(cursor.getString(0));
     }
 
     public double getProfit() {
         return this.getRevenue() - this.getCoachPayments() - this.getHallPayments();
     }
+
     public double getProfit(String EarlyDate, String LaterDate) {
         return this.getRevenue(EarlyDate, LaterDate) - this.getCoachPayments(EarlyDate, LaterDate) - this.getHallPayments(EarlyDate, LaterDate);
     }
@@ -447,6 +449,7 @@ public class DBHandler extends SQLiteOpenHelper {
         cursor.moveToFirst();
         return Double.parseDouble(cursor.getString(0));
     }
+
     public double getCoachPayments(String EarlyDate, String LaterDate){
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -462,6 +465,7 @@ public class DBHandler extends SQLiteOpenHelper {
         cursor.moveToFirst();
         return Double.parseDouble(cursor.getString(0));
     }
+
     public double getHallPayments(String EarlyDate, String LaterDate){
         SQLiteDatabase db = this.getWritableDatabase();
 
