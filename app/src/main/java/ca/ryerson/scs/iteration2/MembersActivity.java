@@ -39,7 +39,7 @@ public class MembersActivity extends AppCompatActivity {
 
         Context context = getApplicationContext();
 
-        final ArrayList<String> members = DBHandler.getInstance(context).getCustomers();
+        final ArrayList<Customer> members = DBHandler.getInstance(context).getCustomers();
 
         if (isCoach) {
             TableRow headerRow = findViewById(R.id.members_table_header);
@@ -88,7 +88,7 @@ public class MembersActivity extends AppCompatActivity {
             });
         }
 
-        for (String member : members)
+        for (Customer member : members)
         {
             TableRow tableRow = new TableRow(context);
 
@@ -117,11 +117,11 @@ public class MembersActivity extends AppCompatActivity {
             }
 
             TextView column1 = new TextView(context);
-            column1.setText(member);
+            column1.setText(member.getName());
             tableRow.addView(column1);
 
             TextView column2 = new TextView(context);
-            column2.setText("Email");
+            column2.setText(member.getEmail());
             tableRow.addView(column2);
 
             tableLayout.addView(tableRow);

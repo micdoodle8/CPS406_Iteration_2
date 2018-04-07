@@ -4,9 +4,9 @@ public class Customer{
 
     private String name;
     private String email;
-    private int consecutivePayment;
+    private String consecutivePayment;
 
-    public Customer(int id, String name, String email, String password, int consecutivePayment) {
+    public Customer(String name, String email, String consecutivePayment) {
 
         this.name = name;
         this.email = email;
@@ -29,11 +29,11 @@ public class Customer{
         this.email = email;
     }
 
-    public int getConsecutivePayment() {
+    public String getConsecutivePayment() {
         return consecutivePayment;
     }
 
-    public void setConsecutivePayment(int consecutivePayment) {
+    public void setConsecutivePayment(String consecutivePayment) {
         this.consecutivePayment = consecutivePayment;
     }
 

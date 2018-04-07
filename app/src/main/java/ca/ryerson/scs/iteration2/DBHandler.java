@@ -218,16 +218,17 @@ public class DBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ArrayList<Customer> customers = new ArrayList<>();
 
-        Cursor cursor = db.rawQuery("SELECT NAME FROM CUSTOMER", null);
+        Cursor cursor = db.rawQuery("SELECT * FROM CUSTOMER", null);
 
         if (cursor.moveToFirst()){
             while (cursor.moveToNext()){
-                Customer customer = new Customer(cursor.get)
+                customers.add(new Customer(cursor.getString(1),
+                        cursor.getString(2),
+                        cursor.getString(3))
+                );
             }
 
         }
-
-        while (cursor.moveToNext()) names.add(cursor.getString(0));
 
         return customers;
     }
