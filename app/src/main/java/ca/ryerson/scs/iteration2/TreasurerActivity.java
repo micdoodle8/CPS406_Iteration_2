@@ -11,6 +11,8 @@ public class TreasurerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_treasurer);
 
+        /*
+
         findViewById(R.id.treasurer_view_income).setOnClickListener( view -> {
 
             Intent openMeetingSetting = new Intent(TreasurerActivity.this, FinancesActivity.class);
@@ -21,7 +23,9 @@ public class TreasurerActivity extends AppCompatActivity {
             Intent openMembers = new Intent(TreasurerActivity.this, FinancesActivity.class);
             this.startActivity(openMembers);
         });
-        
+
+        */
+
         findViewById(R.id.coachList).setOnClickListener( view -> {
 
             Intent openCoaches = new Intent(TreasurerActivity.this, CoachListActivity.class);

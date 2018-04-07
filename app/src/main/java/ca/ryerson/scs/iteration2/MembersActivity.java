@@ -72,7 +72,7 @@ public class MembersActivity extends AppCompatActivity {
                                     CheckBox box = checkboxes.get(i);
                                     if (box.isChecked()) {
 
-                                        Log.d("------->", "notify");
+
                                     }
                                 }
                             } else if (item == 1) {
