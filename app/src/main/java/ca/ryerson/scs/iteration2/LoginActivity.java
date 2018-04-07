@@ -214,7 +214,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (success) {
                     switch (userType) {
                         case "CUSTOMER":
-                            Intent customerActivity = new Intent(LoginActivity.this, MembersActivity.class);
+                            Intent customerActivity = new Intent(LoginActivity.this, ViewScheduleActivity.class);
                             LoginActivity.this.startActivity(customerActivity);
                             break;
                         case "COACH":
@@ -226,7 +226,7 @@ public class LoginActivity extends AppCompatActivity {
                             LoginActivity.this.startActivity(treasurerActivity);
                             break;
                         default:
-                            Intent placeholder = new Intent(LoginActivity.this, MembersActivity.class);
+                            Intent placeholder = new Intent(LoginActivity.this, ViewScheduleActivity.class);
                             LoginActivity.this.startActivity(placeholder);
                             break;
                     }
