@@ -401,38 +401,54 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public double getRevenue(){
         SQLiteDatabase db = this.getWritableDatabase();
-        String EarnedMoney = "";
 
         Cursor cursor = db.rawQuery("SELECT SUM(AMOUNT) as AmountEarned FROM PAYMENT WHERE date BETWEEN '1000-01-01 00:00:00' AND '3000-01-01 00:00:00'", null);
         cursor.moveToFirst();
-        EarnedMoney = cursor.getString(0);
-
-        return Double.parseDouble(EarnedMoney);
+        return Double.parseDouble(cursor.getString(0));
     }
     public double getRevenue(String EarlyDate, String LaterDate){
             SQLiteDatabase db = this.getWritableDatabase();
-            String EarnedMoney = "";
 
             Cursor cursor = db.rawQuery("SELECT SUM(AMOUNT) as AmountEarned FROM PAYMENT WHERE date BETWEEN " + EarlyDate + " AND " + LaterDate, null);
             cursor.moveToFirst();
-            EarnedMoney = cursor.getString(0);
-
-            return Double.parseDouble(EarnedMoney);
+            return Double.parseDouble(cursor.getString(0));
     }
 
     public double getProfit() {
-        // TODO
-        return 0.0;
+        return this.getRevenue() - this.getCoachPayments() - this.getHallPayments();
+    }
+    public double getProfit(String EarlyDate, String LaterDate) {
+        return this.getRevenue(EarlyDate, LaterDate) - this.getCoachPayments(EarlyDate, LaterDate) - this.getHallPayments(EarlyDate, LaterDate);
     }
 
-    public double getCoachPayments() {
-        // TODO
-        return 0.0;
+    public double getCoachPayments(){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT SUM(COACH.rate) as AmountOwed FROM MEETINGS JOIN COACH ON MEETINGS.Organizer = COACH.ID WHERE date BETWEEN '1000-01-01 00:00:00' AND '3000-01-01 00:00:00'", null);
+        cursor.moveToFirst();
+        return Double.parseDouble(cursor.getString(0));
+    }
+    public double getCoachPayments(String EarlyDate, String LaterDate){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT SUM(COACH.rate) as AmountOwed FROM MEETINGS JOIN COACH ON MEETINGS.Organizer = COACH.ID WHERE date BETWEEN " + EarlyDate + " AND " + LaterDate, null);
+        cursor.moveToFirst();
+        return Double.parseDouble(cursor.getString(0));
     }
 
-    public double getHallPayments() {
-        // TODO
-        return 0.0;
+    public double getHallPayments(){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT SUM(HALLS.Rate) as AmountOwed FROM MEETINGS JOIN HALLS ON MEETINGS.Hall_ID WHERE date BETWEEN '1000-01-01 00:00:00' AND '3000-01-01 00:00:00'", null);
+        cursor.moveToFirst();
+        return Double.parseDouble(cursor.getString(0));
+    }
+    public double getHallPayments(String EarlyDate, String LaterDate){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT SUM(HALLS.Rate) as AmountOwed FROM MEETINGS JOIN HALLS ON MEETINGS.Hall_ID WHERE date BETWEEN " + EarlyDate + " AND " + LaterDate, null);
+        cursor.moveToFirst();
+        return Double.parseDouble(cursor.getString(0));
     }
 
     public double getOtherExpenses() {
