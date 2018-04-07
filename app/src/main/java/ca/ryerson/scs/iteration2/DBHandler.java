@@ -160,9 +160,12 @@ public class DBHandler extends SQLiteOpenHelper {
 
 
         db.execSQL("INSERT INTO USER (EMAIL, PASSWORD, ROLE, ASSOCIATED_ID) VALUES('jsmith@mail.com', 'password', 'CUSTOMER', 1) ");
+        db.execSQL("INSERT INTO USER (EMAIL, PASSWORD, ROLE, ASSOCIATED_ID) VALUES('q@w.e', 'r', 'CUSTOMER', 1) ");
         db.execSQL("INSERT INTO USER (EMAIL, PASSWORD, ROLE, ASSOCIATED_ID) VALUES('peter@mail.com', 'hello', 'CUSTOMER', 2) ");
         db.execSQL("INSERT INTO USER (EMAIL, PASSWORD, ROLE, ASSOCIATED_ID) VALUES('tom@mail.com', 'ohwee', 'COACH', 1) ");
+        db.execSQL("INSERT INTO USER (EMAIL, PASSWORD, ROLE, ASSOCIATED_ID) VALUES('a@b.c', 'd', 'COACH', 1) ");
         db.execSQL("INSERT INTO USER (EMAIL, PASSWORD, ROLE, ASSOCIATED_ID) VALUES('treasurer@mail.com', 'admin', 'TREASURER', 1) ");
+        db.execSQL("INSERT INTO USER (EMAIL, PASSWORD, ROLE, ASSOCIATED_ID) VALUES('e@f.g', 'h', 'TREASURER', 1) ");
 
     }
 
@@ -211,14 +214,22 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     //Returns a list of all customer names
-    public ArrayList<String> getCustomers() {
+    public ArrayList<Customer> getCustomers() {
         SQLiteDatabase db = this.getWritableDatabase();
-        ArrayList<String> names = new ArrayList<>();
+        ArrayList<Customer> customers = new ArrayList<>();
 
         Cursor cursor = db.rawQuery("SELECT NAME FROM CUSTOMER", null);
+
+        if (cursor.moveToFirst()){
+            while (cursor.moveToNext()){
+                Customer customer = new Customer(cursor.get)
+            }
+
+        }
+
         while (cursor.moveToNext()) names.add(cursor.getString(0));
 
-        return names;
+        return customers;
     }
 
     //Returns a list of all coach names

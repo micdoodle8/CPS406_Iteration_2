@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -44,9 +45,8 @@ public class MembersActivity extends AppCompatActivity {
             TableRow headerRow = findViewById(R.id.members_table_header);
             selectAllCheckbox = new CheckBox(context);
             headerRow.addView(selectAllCheckbox, 0);
-            selectAllCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean selected) {
+
+            selectAllCheckbox.setOnCheckedChangeListener((compoundButton, selected) -> {
                     // This is a select all / unselect all checkbox
                     if (selected) {
                         for (CheckBox box : checkboxes) {
@@ -57,38 +57,34 @@ public class MembersActivity extends AppCompatActivity {
                             box.setChecked(false);
                         }
                     }
-                }
             });
 
-            notifyButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+            notifyButton.setOnClickListener(view -> {
                     CharSequence options[] = new CharSequence[] { "Notify Selected", "Remove Selected" };
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(MembersActivity.this);
                     builder.setTitle("Perform Action...");
-                    builder.setItems(options, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int item) {
+
+                    builder.setItems(options, (dialogInterface, item) -> {
+
                             if (item == 0) {
                                 for (int i = 0; i < checkboxes.size(); ++i) {
                                     CheckBox box = checkboxes.get(i);
                                     if (box.isChecked()) {
-                                        // TODO Notify customer
+
+                                        Log.d("------->", "notify");
                                     }
                                 }
                             } else if (item == 1) {
                                 for (int i = 0; i < checkboxes.size(); ++i) {
                                     CheckBox box = checkboxes.get(i);
                                     if (box.isChecked()) {
-                                        // TODO Remove customer
+                                        Log.d("------->", "remove");
                                     }
                                 }
                             }
-                        }
                     });
                     builder.show();
-                }
             });
         }
 
@@ -125,12 +121,8 @@ public class MembersActivity extends AppCompatActivity {
             tableRow.addView(column1);
 
             TextView column2 = new TextView(context);
-            column2.setText("Some data");
+            column2.setText("Email");
             tableRow.addView(column2);
-
-            TextView column3 = new TextView(context);
-            column3.setText("Some data");
-            tableRow.addView(column3);
 
             tableLayout.addView(tableRow);
         }

@@ -1,14 +1,12 @@
 package ca.ryerson.scs.iteration2;
 
-public class Customer extends User{
+public class Customer{
 
     private String name;
     private String email;
     private int consecutivePayment;
 
     public Customer(int id, String name, String email, String password, int consecutivePayment) {
-
-        super(email, password, "CUSTOMER", id);
 
         this.name = name;
         this.email = email;
