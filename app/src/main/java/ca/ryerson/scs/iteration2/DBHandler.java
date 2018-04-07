@@ -220,14 +220,11 @@ public class DBHandler extends SQLiteOpenHelper {
 
         Cursor cursor = db.rawQuery("SELECT * FROM CUSTOMER", null);
 
-        if (cursor.moveToFirst()){
-            while (cursor.moveToNext()){
-                customers.add(new Customer(cursor.getString(1),
-                        cursor.getString(2),
-                        cursor.getString(3))
-                );
-            }
-
+        while (cursor.moveToNext()){
+            customers.add(new Customer(cursor.getString(1),
+                    cursor.getString(2),
+                    cursor.getString(3))
+            );
         }
 
         return customers;
