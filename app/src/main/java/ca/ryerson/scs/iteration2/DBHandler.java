@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -227,8 +228,16 @@ public class DBHandler extends SQLiteOpenHelper {
                     cursor.getString(3))
             );
         }
-
         return customers;
+    }
+
+    public int getCustomerId(String email) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT _ID FROM CUSTOMER WHERE EMAIL = ?", new String[] {email});
+
+        if (cursor.getCount() < 0) return 1;
+        return Integer.parseInt(cursor.getString(0));
     }
 
     //Returns a list of all coach names
@@ -247,7 +256,7 @@ public class DBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ArrayList<String> info = new ArrayList<>();
 
-        Cursor cursor = db.rawQuery("SELECT NAME, EMAIL FROM CUSTOMER JOIN CUSTOMER ON ATTENDEES.Customer_ID = CUSTOMER._ID JOIN ATTENDEES ON ATTENDEES.Meeting_ID = MEETING._ID WHERE MEETING.date > CONSECUTIVE_PAY ", null);
+        Cursor cursor = db.rawQuery("SELECT NAME, EMAIL FROM CUSTOMER JOIN CUSTOMER ON ATTENDEE.Customer_ID = CUSTOMER._ID JOIN ATTENDEE ON ATTENDEE.Meeting_ID = MEETING._ID WHERE MEETING.date > CONSECUTIVE_PAY ", null);
         while (cursor.moveToNext()) info.add(cursor.getString(0) + " " + cursor.getString(1));
 
         return info;
@@ -354,7 +363,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         cursor = db.rawQuery("SELECT DATE FROM MEETING " +
                                         "JOIN ATTENDEE ON MEETING._ID = ATTENDEE.MEETING_ID " +
-                                        "JOIN CUSTOMER ON ATTENDEES.Customer_ID = CUSTOMER._ID " +
+                                        "JOIN CUSTOMER ON ATTENDEE.Customer_ID = CUSTOMER._ID " +
                                         "WHERE CUSTOMER._ID = " + customer_ID, null);
         int i = 0, discount = 0, unPaidMeetings = 0;
         while (cursor.moveToNext()) {

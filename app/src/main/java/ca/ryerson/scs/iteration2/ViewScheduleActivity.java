@@ -17,11 +17,16 @@ public class ViewScheduleActivity extends AppCompatActivity{
     ArrayList<String> selectedItems;
     ListView meetings;
     Button confirm;
+    String id;
+    int meeting_ids;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_schedule);
+
+        id = getIntent().getStringExtra("EXTRA_ID");
+
 
         selectedItems=new ArrayList<String>();
     }
@@ -49,8 +54,11 @@ public class ViewScheduleActivity extends AppCompatActivity{
 
                 if(selectedItems.contains(selectedItem))
                     selectedItems.remove(selectedItem); //remove deselected item from the list of selected items
-                else
+                else{
                     selectedItems.add(selectedItem); //add selected item to the list of selected items
+                    //dbHandler.meetingSignUp(id, meeting_ids++);
+                }
+
 
         });
 
