@@ -405,4 +405,29 @@ public class DBHandler extends SQLiteOpenHelper {
 
         return Updated;
     }
+
+    public double getRevenue() {
+        // TODO
+        return 0.0;
+    }
+
+    public double getProfit() {
+        // TODO
+        return 0.0;
+    }
+
+    public double getCoachPayments() {
+        // TODO
+        return 0.0;
+    }
+
+    public double getHallPayments() {
+        // TODO
+        return 0.0;
+    }
+
+    public double getOtherExpenses() {
+        // TODO
+        return 0.0;
+    }
 }

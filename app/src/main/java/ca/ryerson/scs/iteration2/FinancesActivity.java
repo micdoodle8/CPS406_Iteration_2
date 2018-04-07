@@ -1,28 +1,17 @@
 package ca.ryerson.scs.iteration2;
 
-import android.graphics.Color;
-import android.graphics.Typeface;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.GridView;
-import android.widget.RelativeLayout;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
-import java.sql.Connection;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.sql.ResultSet;
+import java.util.Locale;
 
 
 public class FinancesActivity extends AppCompatActivity {
@@ -34,55 +23,74 @@ public class FinancesActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        GridView gridview = (GridView) findViewById(R.id.gridview);
+        TableLayout tableLayout = findViewById(R.id.finances_layout);
+//        GridView gridview = (GridView) findViewById(R.id.gridview);
+
+        Context context = getApplicationContext();
+        DBHandler handler = DBHandler.getInstance(context);
 
         // Query database
         String[] data = new String[] {
-            "Revenue",
-                "$0.0",
-            "Profit",
-                "$0.0",
-            "Coach Payments",
-                "$0.0",
-            "Hall Expenses",
-                "$0.0",
-            "Misc Expenses",
-                "$0.0"
+                "Revenue",
+                "$" + String.format(Locale.CANADA, "%.2f", handler.getRevenue()),
+                "Profit",
+                "$" + String.format(Locale.CANADA, "%.2f", handler.getProfit()),
+                "Coach Payments",
+                "$" + String.format(Locale.CANADA, "%.2f", handler.getCoachPayments()),
+                "Hall Expenses",
+                "$" + String.format(Locale.CANADA, "%.2f", handler.getHallPayments()),
+                "Misc Expenses",
+                "$" + String.format(Locale.CANADA, "%.2f", handler.getOtherExpenses())
         };
 
-        // Populate a List from Array elements
-        final List<String> membersList = new ArrayList<String>(Arrays.asList(data));
+        for (int i = 0; i < data.length; i += 2)
+        {
+            TableRow tableRow = new TableRow(context);
 
-        gridview.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, membersList) {
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View view = super.getView(position, convertView, parent);
-                TextView tv = (TextView) view;
+            TextView column1 = new TextView(context);
+            column1.setText(data[i]);
+            tableRow.addView(column1);
 
-                RelativeLayout.LayoutParams lp =  new RelativeLayout.LayoutParams(
-                        RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT
-                );
-                tv.setLayoutParams(lp);
+            TextView column2 = new TextView(context);
+            column2.setText(data[i + 1]);
+            tableRow.addView(column2);
 
-                // Get the TextView LayoutParams
-                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)tv.getLayoutParams();
+            tableLayout.addView(tableRow);
+        }
 
-                // Set the TextView layout parameters
-                tv.setLayoutParams(params);
-
-                // Display TextView text in center position
-                tv.setGravity(Gravity.CENTER);
-
-                // Set the TextView text font family and text size
-                tv.setTypeface(Typeface.SANS_SERIF, Typeface.NORMAL);
-                tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-
-                // Set the TextView text (GridView item text)
-                tv.setText(membersList.get(position));
-
-                // Return the TextView widget as GridView item
-                return tv;
-            }
-        });
+//        // Populate a List from Array elements
+//        final List<String> membersList = new ArrayList<String>(Arrays.asList(data));
+//
+//        gridview.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, membersList) {
+//            public View getView(int position, View convertView, ViewGroup parent) {
+//                View view = super.getView(position, convertView, parent);
+//                TextView tv = (TextView) view;
+//
+//                RelativeLayout.LayoutParams lp =  new RelativeLayout.LayoutParams(
+//                        RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT
+//                );
+//                tv.setLayoutParams(lp);
+//
+//                // Get the TextView LayoutParams
+//                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)tv.getLayoutParams();
+//
+//                // Set the TextView layout parameters
+//                tv.setLayoutParams(params);
+//
+//                // Display TextView text in center position
+//                tv.setGravity(Gravity.CENTER);
+//
+//                // Set the TextView text font family and text size
+//                tv.setTypeface(Typeface.SANS_SERIF, Typeface.NORMAL);
+//                tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+//
+//                // Set the TextView text (GridView item text)
+//                tv.setText(membersList.get(position));
+//
+//                // Return the TextView widget as GridView item
+//                return tv;
+//            }
+//        });
     }
 
     @Override
