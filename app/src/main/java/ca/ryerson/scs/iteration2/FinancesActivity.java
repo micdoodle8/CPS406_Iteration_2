@@ -36,11 +36,11 @@ public class FinancesActivity extends AppCompatActivity {
                 "Profit",
                 "$" + String.format(Locale.CANADA, "%.2f", handler.getProfit()),
                 "Coach Payments",
-                "$" + String.format(Locale.CANADA, "%.2f", 1.0),
+                "$" + String.format(Locale.CANADA, "%.2f", handler.getCoachPayments()),
                 "Hall Expenses",
-                "$" + String.format(Locale.CANADA, "%.2f", 1.0),
+                "$" + String.format(Locale.CANADA, "%.2f", handler.getHallPayments()),
                 "Misc Expenses",
-                "$" + String.format(Locale.CANADA, "%.2f", 1.0)
+                "$" + String.format(Locale.CANADA, "%.2f", handler.getOtherExpenses())
         };
 
         for (int i = 0; i < data.length; i += 2)
