@@ -26,7 +26,12 @@ public class CoachListActivity extends AppCompatActivity {
         ListView coachlist=(ListView) findViewById(R.id.listView);
         //give multiple selections
         coachlist.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        String[] members={"John Johnson","Thomas Thompson","John Appleseed","Test Tester","Testing Names","hello hellos", "John Johnson","Thomas Thompson","John Appleseed","Test Tester","Testing Names",};
+
+
+        DBHandler dbHandler = DBHandler.getInstance(getApplicationContext());
+
+        ArrayList<String> members = dbHandler.getCoaches();
+
         //items given to list view
         ArrayAdapter<String> aadapter=new ArrayAdapter<String>(this,R.layout.listlayout,R.id.txt_title,members);
         coachlist.setAdapter(aadapter);
