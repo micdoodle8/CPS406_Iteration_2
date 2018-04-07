@@ -252,18 +252,6 @@ public class DBHandler extends SQLiteOpenHelper {
         return info;
     }
 
-    //Returns the money owed
-    public String MoneyOwed(String EarlyDate, String LaterDate){
-        SQLiteDatabase db = this.getWritableDatabase();
-        String OwedMoney = "";
-
-        Cursor cursor = db.rawQuery("SELECT SUM(COACH.rate + HALLS.Rate) as AmountOwed FROM MEETINGS JOIN COACH ON MEETINGS.Organizer = COACH.ID JOIN HALLS ON MEETINGS.Hall_ID WHERE date BETWEEN " + EarlyDate + " AND " + LaterDate, null);
-        cursor.moveToFirst();
-        OwedMoney = cursor.getString(0);
-
-        return OwedMoney;
-    }
-
 
     //Inserts new customer into the database
     public void addNewCustomer(String name, String email) {
@@ -342,15 +330,33 @@ public class DBHandler extends SQLiteOpenHelper {
 
     //Inserts new Attendee info in and checks if a discount is needed
     public void meetingSignUp(int customer_ID, int meeting_ID){
-        int discount = 0;
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
 
+        SQLiteDatabase db = this.getWritableDatabase();
+        ArrayList<String> info = new ArrayList<>();
+        String lastPayment = "1000-01-01 00:00:00";
 
         Cursor cursor = db.rawQuery("SELECT CONSECUTIVE_PAYMENT FROM CUSTOMER WHERE _ID = " + customer_ID, null);
         cursor.moveToFirst();
-        if (cursor.getString(0) == "3") { discount = 10;}
+        if (cursor.getString(0) != "") {lastPayment = cursor.getString(0);}
 
+        cursor = db.rawQuery("SELECT DATE FROM MEETINGS " +
+                                        "JOIN ATTENDEES ON MEETINGS._ID = ATTENDEES.MEETING_ID " +
+                                        "JOIN CUSTOMERS ON ATTENDEES.Customer_ID = CUSTOMER._ID " +
+                                        "WHERE CUSTOMERS._ID = " + customer_ID, null);
+        int i = 0, discount = 0, unPaidMeetings = 0;
+        while (cursor.moveToNext()) {
+            info.add(cursor.getString(0));
+            if (info.get(i).compareTo(lastPayment) > 0) {
+                unPaidMeetings++;
+            }
+        }
+
+        if (unPaidMeetings > 0) { discount = -10;}
+        if (unPaidMeetings == 0 && info.size() > 3) { discount = 10;}
+        if (unPaidMeetings > 3) { return;}
+
+        db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
         values.put(MEMContract.Attendee.CUSTOMER_ID, customer_ID);
         values.put(MEMContract.Attendee.MEETING_ID, meeting_ID);
         values.put(MEMContract.Attendee.DISCOUNT_PERCENT, discount);
