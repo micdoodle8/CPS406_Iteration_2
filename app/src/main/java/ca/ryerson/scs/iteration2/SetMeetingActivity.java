@@ -26,7 +26,6 @@ public class SetMeetingActivity extends AppCompatActivity {
 
         create.setOnClickListener( view -> {
 
-
             DBHandler db = DBHandler.getInstance(getApplicationContext());
 
             db.meetingCreation(1,
@@ -34,8 +33,7 @@ public class SetMeetingActivity extends AppCompatActivity {
                     date.getText().toString(),
                     Integer.parseInt(rate.getText().toString()));
 
-            Intent goBack = new Intent(SetMeetingActivity.this, CoachActivity.class);
-            SetMeetingActivity.this.startActivity(goBack);
+            finish();
         });
 
 

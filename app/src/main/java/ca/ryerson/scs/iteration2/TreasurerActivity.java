@@ -12,22 +12,11 @@ public class TreasurerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_treasurer);
 
 
-
         findViewById(R.id.viewFinances).setOnClickListener( view -> {
 
             Intent openMeetingSetting = new Intent(TreasurerActivity.this, FinancesActivity.class);
             this.startActivity(openMeetingSetting);
         });
-
-
-        /*
-
-        findViewById(R.id.treasurer_year_list).setOnClickListener( view -> {
-            Intent openMembers = new Intent(TreasurerActivity.this, FinancesActivity.class);
-            this.startActivity(openMembers);
-        });
-
-        */
 
         findViewById(R.id.coachList).setOnClickListener( view -> {
 
