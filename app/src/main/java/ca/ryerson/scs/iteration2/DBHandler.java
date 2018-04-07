@@ -247,7 +247,7 @@ public class DBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ArrayList<String> info = new ArrayList<>();
 
-        Cursor cursor = db.rawQuery("SELECT NAME, EMAIL FROM CUSTOMER JOIN CUSTOMER ON ATTENDEES.Customer_ID = CUSTOMER._ID JOIN ATTENDEES ON ATTENDEES.Meeting_ID = MEETINGS._ID WHERE MEETINGS.date > CONSECUTIVE_PAY ", null);
+        Cursor cursor = db.rawQuery("SELECT NAME, EMAIL FROM CUSTOMER JOIN CUSTOMER ON ATTENDEES.Customer_ID = CUSTOMER._ID JOIN ATTENDEES ON ATTENDEES.Meeting_ID = MEETING._ID WHERE MEETING.date > CONSECUTIVE_PAY ", null);
         while (cursor.moveToNext()) info.add(cursor.getString(0) + " " + cursor.getString(1));
 
         return info;
@@ -352,7 +352,7 @@ public class DBHandler extends SQLiteOpenHelper {
         cursor.moveToFirst();
         if (cursor.getString(0) != "") {lastPayment = cursor.getString(0);}
 
-        cursor = db.rawQuery("SELECT DATE FROM MEETINGS " +
+        cursor = db.rawQuery("SELECT DATE FROM MEETING " +
                                         "JOIN ATTENDEE ON MEETING._ID = ATTENDEE.MEETING_ID " +
                                         "JOIN CUSTOMER ON ATTENDEES.Customer_ID = CUSTOMER._ID " +
                                         "WHERE CUSTOMER._ID = " + customer_ID, null);
