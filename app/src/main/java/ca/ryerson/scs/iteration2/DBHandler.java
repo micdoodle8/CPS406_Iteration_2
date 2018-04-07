@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class DBHandler extends SQLiteOpenHelper {
 
@@ -338,6 +339,18 @@ public class DBHandler extends SQLiteOpenHelper {
 
         db.insert(MEMContract.Meeting.TABLE_NAME, null, values);
         db.close();
+    }
+
+    //Inserts new meeting into the database
+    public ArrayList<String> getAllMeetings(){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ArrayList<String> meetings = new ArrayList<>();
+
+        Cursor cursor = db.rawQuery("SELECT DATE FROM MEETING", null);
+        while(cursor.moveToNext()) meetings.add(cursor.getString(0));
+
+        return meetings;
     }
 
     //Inserts new Attendee info in and checks if a discount is needed
