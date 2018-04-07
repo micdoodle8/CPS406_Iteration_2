@@ -11,6 +11,15 @@
     android:verticalSpacing="30px"
     android:id="@+id/parentCoach">
 
+
+    <Button
+        android:id="@+id/viewFinances"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="View Finances">
+    </Button>
+
     <Button
         android:id="@+id/coachList"
         android:layout_width="wrap_content"
